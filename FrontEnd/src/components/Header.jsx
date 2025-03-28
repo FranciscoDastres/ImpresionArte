@@ -1,104 +1,143 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faMapMarkerAlt, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import styled, { keyframes } from 'styled-components';
-import '../styles/header.css';
+"use client"
 
-const scrolling = keyframes`
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-255%);
-  }
-`;
+import { useState } from "react"
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  overflow: hidden;
-  white-space: nowrap;
-`;
+function Header({ setCurrentPage, currentPage }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-const PromotionText = styled.div`
-  display: flex;
-  animation: ${scrolling} 10s linear infinite;
-  white-space: nowrap;
-`;
-
-const Text = styled.span`
-  color: #00003c;
-  font-size: 13px;
-
-  @media(min-width: 768px) {
-    font-size: 14px;
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
   }
 
-  &:nth-child(2) {
-    font-size: 12px;
-
-    @media(min-width: 768px) {
-      font-size: 13px;
-    }
+  const handleNavClick = (page) => {
+    setCurrentPage(page)
+    setIsMenuOpen(false)
   }
-`;
 
-const HeaderContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-`;
-
-const Logo = styled.img`
-  height: 50px;
-`;
-
-const CompanyName = styled.span`
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-left: 10px;
-`;
-
-const SearchBar = styled.input`
-  flex: 1;
-  margin: 0 20px;
-  padding: 10px;
-  font-size: 1rem;
-`;
-
-const IconsContainer = styled.div`
-  display: flex;
-  gap: 15px;
-`;
-
-const Icon = styled(FontAwesomeIcon)`
-  font-size: 1.5rem;
-  cursor: pointer;
-`;
-
-const Header = () => {
   return (
-    <div>
-      <Container>
-        <PromotionText>
-          <Text>¡15% de descuento en tu primera compra web! Ingresa el Código: <strong>PRIMERA15</strong> al ingresar tu pedido.</Text>
-          <Text>- Inicia sesión antes de usarlo</Text>
-        </PromotionText>
-      </Container>
-      <HeaderContainer>
-        <Logo src="https://e7.pngegg.com/pngimages/577/649/png-clipart-question-mark-question-mark.png" alt="Logo" />
-        <CompanyName>ImpresionArte</CompanyName>
-        <SearchBar type="text" placeholder="Buscar productos" />
-        <IconsContainer>
-          <Icon icon={faUser} /> {/* Ícono de usuario */}
-          <Icon icon={faMapMarkerAlt} /> {/* Ícono de mapa */}
-          <Icon icon={faShoppingCart} /> {/* Ícono de carrito de compra */}
-        </IconsContainer>
-      </HeaderContainer>
-    </div>
-  );
-};
+    <header className="sticky top-0 z-40 border-b bg-white shadow-sm">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 py-4">
+        <div className="flex items-center gap-2">
+          <img src="/logo.svg" alt="ImpresionArte Logo" className="h-10 w-auto" />
+          <span className="text-xl font-bold text-purple-600">ImpresionArte</span>
+        </div>
 
-export default Header;
+        {/* Mobile menu button */}
+        <button className="md:hidden rounded-md p-2 text-gray-600 hover:bg-gray-100" onClick={toggleMenu}>
+          {isMenuOpen ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          )}
+        </button>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          <button
+            onClick={() => handleNavClick("home")}
+            className={`text-sm font-medium ${currentPage === "home" ? "text-purple-600" : "hover:text-purple-600"}`}
+          >
+            Inicio
+          </button>
+          <button
+            onClick={() => handleNavClick("servicios")}
+            className={`text-sm font-medium ${currentPage === "servicios" ? "text-purple-600" : "hover:text-purple-600"}`}
+          >
+            Servicios
+          </button>
+          <button
+            onClick={() => handleNavClick("galeria")}
+            className={`text-sm font-medium ${currentPage === "galeria" ? "text-purple-600" : "hover:text-purple-600"}`}
+          >
+            Galería
+          </button>
+          <button
+            onClick={() => handleNavClick("contacto")}
+            className={`text-sm font-medium ${currentPage === "contacto" ? "text-purple-600" : "hover:text-purple-600"}`}
+          >
+            Contacto
+          </button>
+        </nav>
+
+        <div className="hidden md:flex items-center gap-4">
+          <button className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50">
+            Iniciar Sesión
+          </button>
+          <button className="rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700">
+            Cotizar Ahora
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden border-t">
+          <div className="container mx-auto px-4 py-2 space-y-1">
+            <button
+              onClick={() => handleNavClick("home")}
+              className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
+            >
+              Inicio
+            </button>
+            <button
+              onClick={() => handleNavClick("servicios")}
+              className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
+            >
+              Servicios
+            </button>
+            <button
+              onClick={() => handleNavClick("galeria")}
+              className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
+            >
+              Galería
+            </button>
+            <button
+              onClick={() => handleNavClick("contacto")}
+              className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
+            >
+              Contacto
+            </button>
+            <div className="pt-2 pb-1">
+              <button className="w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 mb-2">
+                Iniciar Sesión
+              </button>
+              <button className="w-full rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700">
+                Cotizar Ahora
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  )
+}
+
+export default Header
+
