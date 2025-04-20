@@ -5,9 +5,9 @@ import { useState } from "react"
 function GalleryTabs({ activeTab, setActiveTab }) {
   const tabs = [
     { id: "todos", label: "Todos" },
-    { id: "fine-art", label: "Fine Art" },
-    { id: "fotografico", label: "Fotográfico" },
-    { id: "canvas", label: "Canvas" },
+    { id: "vidrio", label: "Vidrio" },
+    { id: "placas", label: "Placas" },
+    { id: "otros", label: "Otros" },
   ]
 
   return (
@@ -20,7 +20,7 @@ function GalleryTabs({ activeTab, setActiveTab }) {
             className={`px-4 py-2 text-sm font-medium ${
               activeTab === tab.id ? "bg-purple-600 text-white" : "bg-white text-gray-700 hover:bg-gray-50"
             } ${tab.id === "todos" ? "rounded-l-md" : ""} ${
-              tab.id === "canvas" ? "rounded-r-md" : ""
+              tab.id === "otros" ? "rounded-r-md" : ""
             } border border-gray-300 focus:z-10 focus:outline-none`}
           >
             {tab.label}
@@ -31,15 +31,25 @@ function GalleryTabs({ activeTab, setActiveTab }) {
   )
 }
 
-function GalleryItem({ item, category }) {
+function GalleryItem({ imagePath, title, description }) {
+  const [imageError, setImageError] = useState(false)
+
+  // Función para manejar errores de carga de imagen
+  const handleImageError = () => {
+    setImageError(true)
+  }
+
   return (
     <div className="group cursor-pointer">
       <div className="overflow-hidden rounded-lg border bg-white shadow-sm">
         <div className="relative aspect-square overflow-hidden">
           <img
-            src={`https://placehold.co/600x600/9333ea/ffffff?text=${category} ${item}`}
-            alt={`Obra ${category} ${item}`}
+            src={
+              imageError ? `https://placehold.co/600x600/9333ea/ffffff?text=${encodeURIComponent(title)}` : imagePath
+            }
+            alt={title}
             className="object-cover w-full h-full transition-all duration-300 group-hover:scale-105"
+            onError={handleImageError}
           />
           <div className="absolute inset-0 bg-black bg-opacity-0 transition-all duration-300 group-hover:bg-opacity-20 flex items-center justify-center">
             <div className="transform translate-y-8 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
@@ -50,10 +60,8 @@ function GalleryItem({ item, category }) {
           </div>
         </div>
         <div className="p-4">
-          <h3 className="font-medium">
-            Obra {category} {item}
-          </h3>
-          <p className="text-sm text-gray-500">Impresión {category}</p>
+          <h3 className="font-medium">{title}</h3>
+          <p className="text-sm text-gray-500">{description}</p>
         </div>
       </div>
     </div>
@@ -63,13 +71,119 @@ function GalleryItem({ item, category }) {
 function FeaturedWorks({ fullPage = false }) {
   const [activeTab, setActiveTab] = useState("todos")
 
-  // Datos de ejemplo para cada categoría
-  const galleryItems = {
-    todos: Array.from({ length: fullPage ? 12 : 6 }, (_, i) => i + 1),
-    "fine-art": Array.from({ length: fullPage ? 8 : 3 }, (_, i) => i + 1),
-    fotografico: Array.from({ length: fullPage ? 8 : 3 }, (_, i) => i + 1),
-    canvas: Array.from({ length: fullPage ? 8 : 3 }, (_, i) => i + 1),
+  // Definimos las imágenes que funcionan correctamente
+  // Eliminamos las problemáticas o las reemplazamos con placeholders
+  const galleryData = {
+    vidrio: [
+      {
+        imagePath: "/src/assets/img/A3ColourGlass.jpg",
+        title: "Vidrio de Color A3",
+        description: "Impresión en vidrio de alta calidad",
+      },
+      {
+        imagePath: "/src/assets/img/A3ColourGlass_2.jpg",
+        title: "Vidrio de Color A3 - Variante",
+        description: "Impresión en vidrio con acabado especial",
+      },
+      {
+        imagePath: "/src/assets/img/GreenGlass.jpg",
+        title: "Vidrio Verde",
+        description: "Impresión en vidrio con tonos verdes",
+      },
+      {
+        imagePath: "/src/assets/img/YellowAndRedGlass.jpg",
+        title: "Vidrio Amarillo y Rojo",
+        description: "Combinación de colores en vidrio",
+      },
+      {
+        imagePath: "/src/assets/img/YelowGlass.jpg",
+        title: "Vidrio Amarillo",
+        description: "Impresión en vidrio con tonos amarillos",
+      },
+      {
+        imagePath: "/src/assets/img/YelowGlass2.jpg",
+        title: "Vidrio Amarillo - Variante",
+        description: "Otra variante de impresión en vidrio amarillo",
+      },
+    ],
+    placas: [
+      // Reemplazamos las imágenes problemáticas con placeholders
+      {
+        imagePath: "https://placehold.co/600x600/9333ea/ffffff?text=Placa+Navi",
+        title: "Placa Navi",
+        description: "Placa personalizada con diseño Navi",
+      },
+      {
+        imagePath: "/src/assets/img/PlacasNavi2Hand.jpg",
+        title: "Placa Navi 2 Hand",
+        description: "Placa Navi con diseño de manos",
+      },
+      {
+        imagePath: "https://placehold.co/600x600/9333ea/ffffff?text=Placa+Navi+3",
+        title: "Placa Navi 3",
+        description: "Tercera variante de placa Navi",
+      },
+      {
+        imagePath: "/src/assets/img/PlacasNavi4.jpg",
+        title: "Placa Navi 4",
+        description: "Cuarta variante de placa Navi",
+      },
+      {
+        imagePath: "/src/assets/img/PlacasNaviPreguntar.jpg",
+        title: "Placa Navi Preguntar",
+        description: "Placa Navi con diseño de preguntas",
+      },
+    ],
+    otros: [
+      {
+        imagePath: "/src/assets/img/Bender-Chulo.jpg",
+        title: "Bender Chulo",
+        description: "Diseño especial de Bender",
+      },
+      {
+        imagePath: "/src/assets/img/Honda_Revisar.jpg",
+        title: "Honda Revisar",
+        description: "Diseño Honda para revisión",
+      },
+      {
+        imagePath: "/src/assets/img/Unknow_1.jpg",
+        title: "Diseño Desconocido 1",
+        description: "Diseño especial categoría desconocida",
+      },
+      // Reemplazamos la imagen problemática con un placeholder
+      {
+        imagePath: "https://placehold.co/600x600/9333ea/ffffff?text=Arma+Desconocida",
+        title: "Arma Desconocida",
+        description: "Diseño de arma especial",
+      },
+      {
+        imagePath: "/src/assets/img/Unknow_3.jpg",
+        title: "Diseño Desconocido 3",
+        description: "Tercer diseño de categoría desconocida",
+      },
+      {
+        imagePath: "/src/assets/img/Unknow_4.jpg",
+        title: "Diseño Desconocido 4",
+        description: "Cuarto diseño de categoría desconocida",
+      },
+      {
+        imagePath: "/src/assets/img/Unknow_5.jpg",
+        title: "Diseño Desconocido 5",
+        description: "Quinto diseño de categoría desconocida",
+      },
+      {
+        imagePath: "/src/assets/img/Unknow_6.jpg",
+        title: "Diseño Desconocido 6",
+        description: "Sexto diseño de categoría desconocida",
+      },
+    ],
   }
+
+  // Creamos la categoría "todos" combinando todas las imágenes
+  galleryData.todos = [...galleryData.vidrio, ...galleryData.placas, ...galleryData.otros]
+
+  // Limitamos la cantidad de imágenes si no estamos en la página completa
+  const displayItems = fullPage ? galleryData[activeTab] : galleryData[activeTab].slice(0, 6)
 
   return (
     <section id="galeria" className="py-16">
@@ -88,11 +202,11 @@ function FeaturedWorks({ fullPage = false }) {
 
         <div className="mt-6">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {galleryItems[activeTab].map((item) => (
-              <GalleryItem key={item} item={item} category={activeTab === "todos" ? "Artística" : activeTab} />
+            {displayItems.map((item, index) => (
+              <GalleryItem key={index} imagePath={item.imagePath} title={item.title} description={item.description} />
             ))}
           </div>
-          {activeTab === "todos" && !fullPage && (
+          {activeTab === "todos" && !fullPage && galleryData.todos.length > 6 && (
             <div className="mt-10 flex justify-center">
               <button className="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50">
                 Ver más trabajos
@@ -106,4 +220,3 @@ function FeaturedWorks({ fullPage = false }) {
 }
 
 export default FeaturedWorks
-
