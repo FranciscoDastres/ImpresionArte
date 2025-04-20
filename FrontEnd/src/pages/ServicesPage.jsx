@@ -85,5 +85,5 @@ function ServiciosPage() {
   )
 }
 
-export default ServiciosPage
+export default ServiceCards
 

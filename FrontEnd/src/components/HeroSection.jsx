@@ -23,7 +23,7 @@ function HeroSection() {
             </div>
             <div className="relative mx-auto aspect-video overflow-hidden rounded-xl md:aspect-square lg:aspect-[4/3]">
               <img
-                src="https://placehold.co/800x600/9333ea/ffffff?text=Impresiones+Artisticas"
+                src="/src/assets/img/Unknow_3.jpg"
                 alt="Impresiones artísticas"
                 className="object-cover w-full h-full rounded-xl shadow-xl"
               />
