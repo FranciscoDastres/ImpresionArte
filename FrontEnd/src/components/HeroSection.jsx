@@ -28,12 +28,6 @@ function HeroSection() {
                 >
                   Explorar Galería
                 </button>
-                <button
-                  className="rounded-md border border-gray-300 px-4 py-3 font-medium hover:bg-gray-50"
-                  onClick={() => scrollToSection('servicios')}
-                >
-                  Nuestros Servicios
-                </button>
               </div>
             </div>
             <div className="relative mx-auto aspect-video overflow-hidden rounded-xl md:aspect-square lg:aspect-[4/3]">

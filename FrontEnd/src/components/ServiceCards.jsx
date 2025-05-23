@@ -24,13 +24,13 @@ function ServiceCard({ icon, title, description }) {
           "Asesoría durante todo el proceso de diseño e impresión",
           "Ideal para regalos, prototipos, decoración y más",
         ],
-        image: "https://placehold.co/600x400/9333ea/ffffff?text=Impresion+3D+Personalizada",
+        image:"/img/Bender-Chulo.jpg",
       }
       
     ]
   
     return (
-      <section id="servicios" className="py-16 bg-gray-50">
+      <div id="servicios" className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
 
@@ -63,7 +63,7 @@ function ServiceCard({ icon, title, description }) {
             </div>
           )}
         </div>
-      </section>
+      </div>
     )
   }
   
