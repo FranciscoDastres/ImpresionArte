@@ -76,32 +76,32 @@ function FeaturedWorks({ fullPage = false }) {
   const galleryData = {
     vidrio: [
       {
-        imagePath: "/src/assets/img/A3ColourGlass.jpg",
+        imagePath: "/img/A3ColourGlass.jpg",
         title: "Vidrio de Color A3",
         description: "Impresión en vidrio de alta calidad",
       },
       {
-        imagePath: "/src/assets/img/A3ColourGlass_2.jpg",
+        imagePath: "/img/A3ColourGlass_2.jpg",
         title: "Vidrio de Color A3 - Variante",
         description: "Impresión en vidrio con acabado especial",
       },
       {
-        imagePath: "/src/assets/img/GreenGlass.jpg",
+        imagePath: "/img/GreenGlass.jpg",
         title: "Vidrio Verde",
         description: "Impresión en vidrio con tonos verdes",
       },
       {
-        imagePath: "/src/assets/img/YellowAndRedGlass.jpg",
+        imagePath: "/img/YellowAndRedGlass.jpg",
         title: "Vidrio Amarillo y Rojo",
         description: "Combinación de colores en vidrio",
       },
       {
-        imagePath: "/src/assets/img/YelowGlass.jpg",
+        imagePath: "/img/YelowGlass.jpg",
         title: "Vidrio Amarillo",
         description: "Impresión en vidrio con tonos amarillos",
       },
       {
-        imagePath: "/src/assets/img/YelowGlass2.jpg",
+        imagePath: "/img/YelowGlass2.jpg",
         title: "Vidrio Amarillo - Variante",
         description: "Otra variante de impresión en vidrio amarillo",
       },
@@ -114,7 +114,7 @@ function FeaturedWorks({ fullPage = false }) {
         description: "Placa personalizada con diseño Navi",
       },
       {
-        imagePath: "/src/assets/img/PlacasNavi2Hand.jpg",
+        imagePath: "/img/PlacasNavi2Hand.jpg",
         title: "Placa Navi 2 Hand",
         description: "Placa Navi con diseño de manos",
       },
@@ -124,29 +124,29 @@ function FeaturedWorks({ fullPage = false }) {
         description: "Tercera variante de placa Navi",
       },
       {
-        imagePath: "/src/assets/img/PlacasNavi4.jpg",
+        imagePath: "/img/PlacasNavi4.jpg",
         title: "Placa Navi 4",
         description: "Cuarta variante de placa Navi",
       },
       {
-        imagePath: "/src/assets/img/PlacasNaviPreguntar.jpg",
+        imagePath: "/img/PlacasNaviPreguntar.jpg",
         title: "Placa Navi Preguntar",
         description: "Placa Navi con diseño de preguntas",
       },
     ],
     otros: [
       {
-        imagePath: "/src/assets/img/Bender-Chulo.jpg",
+        imagePath: "/img/Bender-Chulo.jpg",
         title: "Bender Chulo",
         description: "Diseño especial de Bender",
       },
       {
-        imagePath: "/src/assets/img/Honda_Revisar.jpg",
+        imagePath: "/img/Honda_Revisar.jpg",
         title: "Honda Revisar",
         description: "Diseño Honda para revisión",
       },
       {
-        imagePath: "/src/assets/img/Unknow_1.jpg",
+        imagePath: "/img/Unknow_1.jpg",
         title: "Diseño Desconocido 1",
         description: "Diseño especial categoría desconocida",
       },
@@ -157,22 +157,22 @@ function FeaturedWorks({ fullPage = false }) {
         description: "Diseño de arma especial",
       },
       {
-        imagePath: "/src/assets/img/Unknow_3.jpg",
+        imagePath: "/img/Unknow_3.jpg",
         title: "Diseño Desconocido 3",
         description: "Tercer diseño de categoría desconocida",
       },
       {
-        imagePath: "/src/assets/img/Unknow_4.jpg",
+        imagePath: "/img/Unknow_4.jpg",
         title: "Diseño Desconocido 4",
         description: "Cuarto diseño de categoría desconocida",
       },
       {
-        imagePath: "/src/assets/img/Unknow_5.jpg",
+        imagePath: "/img/Unknow_5.jpg",
         title: "Diseño Desconocido 5",
         description: "Quinto diseño de categoría desconocida",
       },
       {
-        imagePath: "/src/assets/img/Unknow_6.jpg",
+        imagePath: "/img/Unknow_6.jpg",
         title: "Diseño Desconocido 6",
         description: "Sexto diseño de categoría desconocida",
       },

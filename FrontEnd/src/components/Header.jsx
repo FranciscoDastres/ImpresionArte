@@ -2,6 +2,13 @@
 
 import { useState } from "react"
 
+function scrollToSection(id) {
+  const section = document.getElementById(id);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 function Header({ setCurrentPage, currentPage }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -9,9 +16,12 @@ function Header({ setCurrentPage, currentPage }) {
     setIsMenuOpen(!isMenuOpen)
   }
 
-  const handleNavClick = (page) => {
+  const handleNavClick = (page, sectionId) => {
     setCurrentPage(page)
     setIsMenuOpen(false)
+    if (sectionId) {
+      setTimeout(() => scrollToSection(sectionId), 100) // Espera para asegurar render
+    }
   }
 
   return (
@@ -61,25 +71,25 @@ function Header({ setCurrentPage, currentPage }) {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <button
-            onClick={() => handleNavClick("home")}
+            onClick={() => handleNavClick("home", "inicio")}
             className={`text-sm font-medium ${currentPage === "home" ? "text-purple-600" : "hover:text-purple-600"}`}
           >
             Inicio
           </button>
           <button
-            onClick={() => handleNavClick("servicios")}
+            onClick={() => handleNavClick("servicios", "servicios")}
             className={`text-sm font-medium ${currentPage === "servicios" ? "text-purple-600" : "hover:text-purple-600"}`}
           >
             Servicios
           </button>
           <button
-            onClick={() => handleNavClick("galeria")}
+            onClick={() => handleNavClick("galeria", "galeria")}
             className={`text-sm font-medium ${currentPage === "galeria" ? "text-purple-600" : "hover:text-purple-600"}`}
           >
             Galería
           </button>
           <button
-            onClick={() => handleNavClick("contacto")}
+            onClick={() => handleNavClick("contacto", "contacto")}
             className={`text-sm font-medium ${currentPage === "contacto" ? "text-purple-600" : "hover:text-purple-600"}`}
           >
             Contacto
@@ -101,25 +111,25 @@ function Header({ setCurrentPage, currentPage }) {
         <div className="md:hidden border-t">
           <div className="container mx-auto px-4 py-2 space-y-1">
             <button
-              onClick={() => handleNavClick("home")}
+              onClick={() => handleNavClick("home", "inicio")}
               className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
             >
               Inicio
             </button>
             <button
-              onClick={() => handleNavClick("servicios")}
+              onClick={() => handleNavClick("servicios", "servicios")}
               className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
             >
               Servicios
             </button>
             <button
-              onClick={() => handleNavClick("galeria")}
+              onClick={() => handleNavClick("galeria", "galeria")}
               className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
             >
               Galería
             </button>
             <button
-              onClick={() => handleNavClick("contacto")}
+              onClick={() => handleNavClick("contacto", "contacto")}
               className="block w-full text-left rounded-md px-3 py-2 text-base font-medium hover:bg-gray-100"
             >
               Contacto

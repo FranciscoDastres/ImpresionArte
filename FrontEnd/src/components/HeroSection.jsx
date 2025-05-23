@@ -1,3 +1,12 @@
+import unknow3 from '/img/Unknow_3.jpg';
+
+function scrollToSection(id) {
+  const section = document.getElementById(id);
+  if (section) {
+    section.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
 function HeroSection() {
     return (
       <section className="relative overflow-hidden bg-gradient-to-b from-purple-100 to-white py-16 md:py-24">
@@ -13,17 +22,23 @@ function HeroSection() {
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <button className="rounded-md bg-purple-600 px-4 py-3 font-medium text-white hover:bg-purple-700">
+                <button
+                  className="rounded-md bg-purple-600 px-4 py-3 font-medium text-white hover:bg-purple-700"
+                  onClick={() => scrollToSection('galeria')}
+                >
                   Explorar Galería
                 </button>
-                <button className="rounded-md border border-gray-300 px-4 py-3 font-medium hover:bg-gray-50">
+                <button
+                  className="rounded-md border border-gray-300 px-4 py-3 font-medium hover:bg-gray-50"
+                  onClick={() => scrollToSection('servicios')}
+                >
                   Nuestros Servicios
                 </button>
               </div>
             </div>
             <div className="relative mx-auto aspect-video overflow-hidden rounded-xl md:aspect-square lg:aspect-[4/3]">
               <img
-                src="/src/assets/img/Unknow_3.jpg"
+                src={unknow3}
                 alt="Impresiones artísticas"
                 className="object-cover w-full h-full rounded-xl shadow-xl"
               />
