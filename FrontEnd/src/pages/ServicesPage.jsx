@@ -1,6 +1,6 @@
 import ServiceCards from "../components/ServiceCards"
 
-function ServiciosPage() {
+function ServiceCards() {
   return (
     <div className="py-8">
       <div className="container mx-auto px-4 md:px-6">
