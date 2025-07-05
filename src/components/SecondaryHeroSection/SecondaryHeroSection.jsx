@@ -1,97 +1,36 @@
-// SecondaryHeroSection.jsx
-import { Truck } from 'lucide-react';
-
-// 🔁 Datos de los banners apilados a la derecha
-const rightBanners = [
-  {
-    image: 'https://via.placeholder.com/200x150',
-    title: 'Buy women products with low price',
-    price: '₹999',
-    link: '#',
-    bg: 'bg-purple-100',
-  },
-  {
-    image: 'https://via.placeholder.com/200x150',
-    title: "Buy Men's Bags with low price",
-    price: '₹900',
-    link: '#',
-    bg: 'bg-yellow-100',
-  },
-];
-
-// 🧱 Cards inferiores
-const miniCards = [
-  { img: 'https://via.placeholder.com/150', title: "Buy Apple iPhone", price: '₹45000' },
-  { img: 'https://via.placeholder.com/150', title: "Buy Men's Footwear", price: '₹1500' },
-  { img: 'https://via.placeholder.com/150', title: "Buy women products", price: '₹999' },
-  { img: 'https://via.placeholder.com/150', title: "Buy Men's Bags", price: '₹900' },
-];
-
 export default function SecondaryHeroSection() {
   return (
-    <section className="max-w-7xl mx-auto px-4 py-8 space-y-12">
-
-      {/* 🔁 Parte superior: animación + 2 banners */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Animación a la izquierda (2 columnas) */}
-        <div className="md:col-span-2 h-[324px] rounded-xl overflow-hidden shadow-lg">
+    <section className="w-full py-20 px-4 flex justify-center items-center rounded-xl">
+      <div className="max-w-5xl w-full flex flex-col md:flex-row items-center gap-12 rounded-3xl shadow-2xl p-10 border border-gray-100  ">
+        {/* Imagen moderna o ilustración */}
+        <div className="flex-1 flex justify-center items-center">
           <img
-            src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
-            alt="Animación"
-            className="w-full h-full object-cover"
+            src="/images/secondary-hero-section/secondary-hero-section.jpg"
+            alt="Personalización 3D"
+            className="h-80 object-contain shadow-xl rounded-xl"
+            style={{boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.15)'}}
           />
         </div>
-
-        {/* Banners apilados a la derecha */}
-        <div className="flex flex-col gap-6">
-          {rightBanners.map((b, i) => (
-            <div
-              key={i}
-              className={`${b.bg} rounded-xl flex items-center p-4 shadow`}
-              style={{ height: 150 }}
-            >
-              <img
-                src={b.image}
-                alt={b.title}
-                className="h-full object-contain"
-              />
-              <div className="ml-4 flex-1">
-                <p className="text-sm font-medium">{b.title}</p>
-                <p className="mt-1 text-red-600 font-bold">{b.price}</p>
-                <a href={b.link} className="text-xs underline mt-2 block">
-                  SHOP NOW
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 🚚 Free Shipping Bar */}
-      <div className="border border-red-500 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
-        <div className="flex items-center gap-3">
-          <Truck className="text-red-500" />
-          <span className="font-semibold">FREE SHIPPING</span>
-          <span className="text-sm text-gray-600">
-            Free Delivery On Your First Order and over $200
-          </span>
-        </div>
-        <span className="font-bold text-red-500">- Only $200*</span>
-      </div>
-
-      {/* 🧱 Mini cards fila */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {miniCards.map((c, i) => (
-          <div
-            key={i}
-            className="bg-gray-100 rounded-xl flex flex-col items-center p-4 shadow"
+        {/* Texto y botón */}
+        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left bg-white/90 backdrop-blur-sm p-8">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-black mb-4 drop-shadow-lg leading-tight">
+            ¡Personaliza tu producto 3D!
+          </h2>
+          <p className="text-xl text-black mb-8 max-w-lg leading-relaxed">
+            ¿Tienes una idea única? Cuéntanos y la hacemos realidad con impresión 3D profesional. Atención personalizada y resultados increíbles.
+          </p>
+          <a
+            href="https://wa.me/5491123456789"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white font-bold px-10 py-4 rounded-full text-xl shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300"
           >
-            <img src={c.img} alt={c.title} className="h-20 object-contain mb-2" />
-            <p className="text-sm font-medium text-center">{c.title}</p>
-            <p className="text-red-600 font-semibold mt-1">{c.price}</p>
-            <a href="#" className="text-xs underline mt-2">SHOP NOW</a>
-          </div>
-        ))}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12c0 5.385 4.365 9.75 9.75 9.75 1.7 0 3.3-.425 4.7-1.225l3.3.85a1.125 1.125 0 001.375-1.375l-.85-3.3A9.708 9.708 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12z" />
+            </svg>
+            ¡Contáctanos por WhatsApp!
+          </a>
+        </div>
       </div>
     </section>
   );

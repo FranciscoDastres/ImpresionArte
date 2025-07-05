@@ -67,29 +67,22 @@ const data = {
       title: "Bender Chulo",
       price: "$35.00",
       oldPrice: "$45.00",
-      image: "/images/img/Bender-Chulo.jpg",
+      image: "/images/products/futurama/bender-chulo.jpg",
       discount: "22%",
     },
     {
       title: "Figura Unknown 1",
       price: "$28.00",
       oldPrice: "$38.00",
-      image: "/images/img/Unknow_1.jpg",
+      image: "/images/products/robots/Unknow_1.jpg",
       discount: "26%",
     },
     {
       title: "Figura Unknown 2 Weapon",
       price: "$32.00",
       oldPrice: "$42.00",
-      image: "/images/img/Unknow_2 weapon.jpg",
+      image: "/images/products/robots/Unknow_2.jpg",
       discount: "24%",
-    },
-    {
-      title: "Figura Unknown 3",
-      price: "$30.00",
-      oldPrice: "$40.00",
-      image: "/images/img/Unknow_3.jpg",
-      discount: "25%",
     },
   ],
 };
@@ -148,12 +141,12 @@ function PopularProducts() {
         {products.map((product, index) => (
           <div
             key={index}
-            className="min-w-[250px] bg-white rounded-xl shadow-lg p-4 flex-shrink-0 relative border border-gray-200"
+            className="min-w-[250px] bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 flex-shrink-0 relative border border-gray-200"
           >
             <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
               {product.discount}
             </span>
-            <div className="w-40 h-40 flex items-center justify-center mb-2 bg-gray-100 rounded-lg overflow-hidden">
+            <div className="w-40 h-40 flex items-center justify-center mb-2 bg-gray-100/80 rounded-lg overflow-hidden">
               <img
                 src={product.image}
                 alt={product.title}

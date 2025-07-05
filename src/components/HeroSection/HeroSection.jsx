@@ -49,12 +49,7 @@ function HeroSection() {
 
   return (
     <div className="herosection-wrapper py-3 px-3 relative">
-      {/* Fondo gradiente tecnológico */}
-      <div className="absolute inset-0 w-full h-full z-0" style={{
-        background: 'linear-gradient(120deg, #232526 0%, #6e6e6e 60%, #b3e0ff 100%)',
-        opacity: 1
-      }} />
-      {/* Overlay de líneas diagonales */}
+      {/* Solo overlay de líneas diagonales para efecto tecnológico */}
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none" style={{
         backgroundImage: 'repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px, transparent 2px, transparent 20px)',
         opacity: 0.7
@@ -79,21 +74,21 @@ function HeroSection() {
                   
                   {/* Columna izquierda - Contenido de texto */}
                   <div className="flex flex-col justify-center items-center md:items-start px-4 md:px-8 lg:px-12">
-                    <div className="text-white max-w-lg lg:max-w-xl xl:max-w-2xl">
+                    <div className="text-black max-w-lg lg:max-w-xl xl:max-w-2xl">
                       {/* Título */}
-                      <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 lg:mb-8 transition-transform duration-500 leading-tight text-center md:text-left drop-shadow-lg">
+                      <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 lg:mb-8 transition-transform duration-500 leading-tight text-center md:text-left">
                         {slide.title}
                       </h1>
                       
                       {/* Subtítulo */}
-                      <p className="text-lg md:text-xl lg:text-2xl xl:text-3xl mb-6 md:mb-8 lg:mb-10 opacity-90 transition-transform duration-500 leading-relaxed text-center md:text-left drop-shadow-md">
+                      <p className="text-lg md:text-xl lg:text-2xl xl:text-3xl mb-6 md:mb-8 lg:mb-10 opacity-90 transition-transform duration-500 leading-relaxed text-center md:text-left">
                         {slide.subtitle}
                       </p>
                       
                       {/* Botón - siempre en la misma posición */}
                       <div className="flex justify-center md:justify-start">
                         <button
-                          className="bg-white text-purple-600 rounded-full font-bold hover:bg-gray-100 hover:scale-105 transition-all duration-300 px-8 py-3 md:px-10 md:py-4 text-sm md:text-base lg:text-lg shadow-xl border-2 border-white/20"
+                          className="bg-white text-gray-800 rounded-full font-bold hover:bg-gray-100 hover:scale-105 transition-all duration-300 px-8 py-3 md:px-10 md:py-4 text-sm md:text-base lg:text-lg shadow-xl border-2 border-white/20"
                           style={{
                             minWidth: "200px",
                             height: "56px"

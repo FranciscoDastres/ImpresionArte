@@ -5,7 +5,7 @@ import NotFound from "./components/NotFound/NotFound"
 import "./index.css"
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e0e7ef] via-[#b3e0ff] to-[#f0faff]">
+    <div className="min-h-screen">
       <Routes>
         <Route path="/" element={<Layout><HomePage /></Layout>} />
         {/* Futuras rutas */}

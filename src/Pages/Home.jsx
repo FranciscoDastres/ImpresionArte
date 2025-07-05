@@ -4,16 +4,11 @@ import PopularProducts from "../components/PopularProducts/PopularProducts"
 
 function Home() {
   return (
-    <>
-      <div className="bg-sky-100">
-        <HeroSection />
-        <CategoryCards />
-      </div>
-
-      <div className="bg-gray-200">
-        <PopularProducts />
-      </div>
-    </>
+    <div className="min-h-screen">
+      <HeroSection />
+      <CategoryCards />
+      <PopularProducts />
+    </div>
   );
 }
 

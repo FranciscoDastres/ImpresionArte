@@ -18,7 +18,7 @@ function CategoryCards() {
           <div
             key={category.id}
             onClick={() => handleCategoryClick(category.name)}
-            className="bg-white aspect-square shadow-lg border border-gray-200 p-4 sm:p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-xl"
+            className="bg-white/90 backdrop-blur-sm aspect-square shadow-lg border border-gray-200 p-4 sm:p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-xl"
           >
             <div className={`${category.bgColor} w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mb-4`}>
               <span className={`text-3xl sm:text-4xl ${category.iconColor}`}>{category.icon}</span>

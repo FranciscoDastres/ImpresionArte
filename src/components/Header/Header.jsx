@@ -38,7 +38,7 @@ function Header() {
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
             <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200">
-              <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                 <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                 </svg>
@@ -55,7 +55,7 @@ function Header() {
                 <input
                   type="text"
                   placeholder="Buscar productos..."
-                  className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-800 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm border border-gray-200"
+                  className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-800 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm border border-gray-200"
                 />
                 <button className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,13 +72,13 @@ function Header() {
 
             {/* Right Side */}
             <div className="hidden md:flex items-center space-x-4">
-              <a href="#" className="text-gray-700 hover:text-purple-600 transition-colors">Login</a>
+              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Login</a>
               <a className="text-gray-400">|</a>
-              <a href="#" className="text-gray-700 hover:text-purple-600 transition-colors">Register</a>
-              <button className="p-2 hover:text-purple-600 transition-colors">
+              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Register</a>
+              <button className="p-2 hover:text-blue-600 transition-colors">
                 <Heart className="w-5 h-5" />
               </button>
-              <button className="p-2 hover:text-purple-600 transition-colors">
+              <button className="p-2 hover:text-blue-600 transition-colors">
                 <ShoppingCart className="w-5 h-5" />
               </button>
             </div>
@@ -99,12 +99,12 @@ function Header() {
           <input
             type="text"
             placeholder="Buscar productos..."
-            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-800 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm border border-gray-200"
+            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-800 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm border border-gray-200"
           />
-          <a href="#" className="block text-sm text-gray-700 hover:text-purple-600 transition-colors">Login</a>
-          <a href="#" className="block text-sm text-gray-700 hover:text-purple-600 transition-colors">Register</a>
-          <a href="#" className="block text-sm text-gray-700 hover:text-purple-600 transition-colors">Favoritos</a>
-          <a href="#" className="block text-sm text-gray-700 hover:text-purple-600 transition-colors">Carrito</a>
+          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Login</a>
+          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Register</a>
+          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Favoritos</a>
+          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Carrito</a>
           
           {/* Mobile Categories */}
           <div className="pt-2 border-t border-gray-200">
@@ -113,7 +113,7 @@ function Header() {
               <a 
                 key={category.name}
                 href={category.href} 
-                className="block text-sm text-gray-700 hover:text-purple-600 transition-colors py-1"
+                className="block text-sm text-gray-700 hover:text-blue-600 transition-colors py-1"
               >
                 {category.name}
               </a>
@@ -152,7 +152,7 @@ function Header() {
                     <div className="fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transition-transform duration-300">
                       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                         <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                             <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                             </svg>
@@ -170,7 +170,7 @@ function Header() {
                         <ul className="space-y-2">
                           {sidebarCategories.map((cat) => (
                             <li key={cat.name}>
-                              <a href="#" className="text-gray-700 hover:text-purple-600 text-base font-medium py-2 px-2 rounded transition block">
+                              <a href="#" className="text-gray-700 hover:text-blue-600 text-base font-medium py-2 px-2 rounded transition block">
                                 {cat.name}
                               </a>
                             </li>
@@ -188,7 +188,7 @@ function Header() {
                   <a 
                     key={category.name} 
                     href={category.href} 
-                    className="text-gray-700 hover:text-purple-600 transition-colors duration-200"
+                    className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
                   >
                     {category.name}
                   </a>
