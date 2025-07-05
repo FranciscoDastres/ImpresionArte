@@ -15,19 +15,19 @@ function Header() {
 
   const categories = [
     {
-      name: "Limpieza",
-      description: "Shampoo & Soap Essentials",
-      href: "/categoria/limpieza"
+      name: "Vasos 3D",
+      description: "Vasos personalizados en 3D",
+      href: "/categoria/vasos-3d"
     },
     {
-      name: "Tecnología", 
-      description: "Electrónicos y Gadgets",
-      href: "/categoria/tecnologia"
+      name: "Placas Navi",
+      description: "Placas decorativas Navi",
+      href: "/categoria/placas-navi"
     },
     {
-      name: "Moda Mujer",
-      description: "Ropa y Accesorios",
-      href: "/categoria/moda-mujer"
+      name: "Figuras",
+      description: "Figuras coleccionables 3D",
+      href: "/categoria/figuras"
     }
   ];
 
@@ -205,7 +205,7 @@ function Header() {
                   d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
                 />
               </svg>
-              <span>Envío Gratis en Compras Mayores a $50</span>
+              <span>Envío Gratis en Compras Mayores a $20.000</span>
             </div>
           </div>
         </div>

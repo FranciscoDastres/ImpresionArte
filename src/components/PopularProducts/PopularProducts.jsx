@@ -4,21 +4,21 @@ import { useRef, useState } from "react";
 const data = {
   vasos3d: [
     {
-      title: "Vaso 3D Colour Glass Verde",
+      title: "Vaso 3D Verde",
       price: "$25.00",
       oldPrice: "$30.00",
       image: "/images/products/vasos3d/green-glass.jpg",
       discount: "17%",
     },
     {
-      title: "Vaso 3D Colour Glass Amarillo",
+      title: "Vaso 3D Amarillo",
       price: "$22.00",
       oldPrice: "$28.00",
       image: "/images/products/vasos3d/yellow-glass1.jpg",
       discount: "21%",
     },
     {
-      title: "Vaso 3D Colour Glass Rojo",
+      title: "Vaso 3D  Rojo",
       price: "$24.00",
       oldPrice: "$29.00",
       image: "/images/products/vasos3d/colour-glass2.jpg",
@@ -123,8 +123,8 @@ function PopularProducts() {
             onClick={() => setActiveCategory(cat)}
             className={`uppercase text-sm font-semibold ${
               activeCategory === cat
-                ? "text-white border-b-2 border-white"
-                : "text-gray-300 hover:text-white"
+                ? "text-black border-b-2 border-black"
+                : "text-gray-700 hover:text-black"
             } pb-1 transition-colors`}
           >
             {cat}
@@ -153,11 +153,13 @@ function PopularProducts() {
             <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
               {product.discount}
             </span>
-            <img
-              src={product.image}
-              alt={product.title}
-              className="w-full h-40 object-contain mb-2"
-            />
+            <div className="w-40 h-40 flex items-center justify-center mb-2 bg-gray-100 rounded-lg overflow-hidden">
+              <img
+                src={product.image}
+                alt={product.title}
+                className="w-full h-full object-contain"
+              />
+            </div>
             <h3 className="font-semibold text-sm truncate">{product.title}</h3>
             <div className="flex items-center gap-2">
               <span className="text-red-600 font-bold">{product.price}</span>
