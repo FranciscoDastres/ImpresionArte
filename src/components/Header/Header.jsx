@@ -3,9 +3,15 @@
 import { useState } from "react";
 import { Menu, X, ShoppingCart, Heart, ChevronDown } from "lucide-react";
 
+const sidebarCategories = [
+  { name: "Vasos 3D" },
+  { name: "Placas Navi" },
+  { name: "Figuras" },
+];
+
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [categoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const categories = [
     {
@@ -121,48 +127,58 @@ function Header() {
         <div className="px-10 mx-auto">
           <div className="flex items-center justify-between py-3">
             <div className="flex items-center space-x-8">
-              {/* Categorías Dropdown */}
+              {/* Sidebar Categorías Desktop */}
               <div className="relative">
                 <button
-                  onClick={() => setCategoryMenuOpen(!categoryMenuOpen)}
-                  onMouseEnter={() => setCategoryMenuOpen(true)}
-                  className="flex items-center space-x-2 hover:text-purple-600 transition-colors duration-200"
+                  onClick={() => setSidebarOpen(true)}
+                  className="flex items-center space-x-2 transition-colors duration-200"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                   <span className="font-medium">COMPRAR POR CATEGORÍA</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${categoryMenuOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${sidebarOpen ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* Dropdown Menu */}
-                {categoryMenuOpen && (
-                  <div
-                    className="absolute top-full left-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-xl z-50"
-                    onMouseLeave={() => setCategoryMenuOpen(false)}
-                  >
-                    <div className="p-4">
-                      <div className="text-sm font-medium text-gray-900 mb-3">Nuestras Categorías</div>
-                      <div className="space-y-2">
-                        {categories.map((category) => (
-                          <a
-                            key={category.name}
-                            href={category.href}
-                            className="flex items-center p-3 rounded-lg hover:bg-purple-50 transition-colors duration-200 group"
-                          >
-                            <div>
-                              <div className="font-medium text-gray-900 group-hover:text-purple-600">
-                                {category.name}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                {category.description}
-                              </div>
-                            </div>
-                          </a>
-                        ))}
+                {/* Sidebar y Overlay */}
+                {sidebarOpen && (
+                  <>
+                    {/* Overlay */}
+                    <div
+                      className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+                      onClick={() => setSidebarOpen(false)}
+                    />
+                    {/* Sidebar */}
+                    <div className="fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transition-transform duration-300">
+                      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                        <div className="flex items-center space-x-2">
+                          <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="font-bold text-lg text-gray-800">ImpresionArte</div>
+                            <div className="text-xs text-gray-600">Impresiones 3D Personalizadas</div>
+                          </div>
+                        </div>
+                        <button onClick={() => setSidebarOpen(false)}>
+                          <X className="w-6 h-6 text-gray-600" />
+                        </button>
+                      </div>
+                      <div className="flex-1 overflow-y-auto px-6 py-4">
+                        <ul className="space-y-2">
+                          {sidebarCategories.map((cat) => (
+                            <li key={cat.name}>
+                              <a href="#" className="text-gray-700 hover:text-purple-600 text-base font-medium py-2 px-2 rounded transition block">
+                                {cat.name}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
 
