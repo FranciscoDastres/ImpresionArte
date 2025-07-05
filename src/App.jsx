@@ -5,13 +5,13 @@ import NotFound from "./components/NotFound/NotFound"
 import "./index.css"
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-[#e0e7ef] via-[#b3e0ff] to-[#f0faff]">
       <Routes>
         <Route path="/" element={<Layout><HomePage /></Layout>} />
         {/* Futuras rutas */}
         <Route path="*" element={<Layout><NotFound /></Layout>} />
       </Routes>
-      <h1 className="text-blue-500 text-4xl font-bold">¡Tailwind funciona!</h1>
+
     </div>
   )
 }

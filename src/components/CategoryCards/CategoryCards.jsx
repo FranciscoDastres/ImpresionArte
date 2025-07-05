@@ -2,19 +2,13 @@
 
 function CategoryCards() {
   const categories = [
-    { id: 1, name: "Fashion", icon: "👔", bgColor: "bg-blue-100", iconColor: "text-blue-600" },
-    { id: 2, name: "Electronics", icon: "📱", bgColor: "bg-purple-100", iconColor: "text-purple-600" },
-    { id: 3, name: "Bags", icon: "👜", bgColor: "bg-red-100", iconColor: "text-red-600" },
-    { id: 4, name: "Footwear", icon: "👟", bgColor: "bg-blue-100", iconColor: "text-blue-600" },
-    { id: 5, name: "Groceries", icon: "🛒", bgColor: "bg-green-100", iconColor: "text-green-600" },
-    { id: 6, name: "Beauty", icon: "💄", bgColor: "bg-pink-100", iconColor: "text-pink-600" },
-    { id: 7, name: "Beauty", icon: "💄", bgColor: "bg-pink-100", iconColor: "text-pink-600" },
-    { id: 8, name: "Beauty", icon: "💄", bgColor: "bg-pink-100", iconColor: "text-pink-600" },
+    { id: 1, name: "Vasos 3D", icon: "🥤", bgColor: "bg-[#e0f2fe]", iconColor: "text-blue-500" },
+    { id: 2, name: "Placas Navi", icon: "🏠", bgColor: "bg-[#f1f5f9]", iconColor: "text-sky-600" },
+    { id: 3, name: "Figuras", icon: "🎭", bgColor: "bg-[#cbd5e1]", iconColor: "text-gray-700" },
   ]
 
   const handleCategoryClick = (categoryName) => {
-    console.log(`Clicked on ${categoryName}`)
-    // Aquí después agregaremos la navegación
+    // Navegación futura
   }
 
   return (
@@ -24,7 +18,7 @@ function CategoryCards() {
           <div
             key={category.id}
             onClick={() => handleCategoryClick(category.name)}
-            className="bg-white aspect-square  shadow-md border border-gray-200 p-4 sm:p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-300"
+            className="bg-white aspect-square shadow-lg border border-gray-200 p-4 sm:p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-xl"
           >
             <div className={`${category.bgColor} w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mb-4`}>
               <span className={`text-3xl sm:text-4xl ${category.iconColor}`}>{category.icon}</span>

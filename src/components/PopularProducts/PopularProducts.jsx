@@ -2,136 +2,94 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
 
 const data = {
-  fashion: [
+  vasos3d: [
     {
-      title: "fashion Men Opaque Casual Shirt",
-      price: "₹1,450.00",
-      oldPrice: "₹1,650.00",
-      image: "/images/products/fashion/shirt-1.jpg",
-      discount: "10%",
+      title: "Vaso 3D Colour Glass Verde",
+      price: "$25.00",
+      oldPrice: "$30.00",
+      image: "/images/products/vasos3d/green-glass.jpg",
+      discount: "17%",
     },
     {
-      title: "fashion Men Comfort Cuban Collar",
-      price: "₹1,850.00",
-      oldPrice: "₹2,200.00",
-      image: "/images/products/fashion/shirt-2.jpg",
-      discount: "14%",
+      title: "Vaso 3D Colour Glass Amarillo",
+      price: "$22.00",
+      oldPrice: "$28.00",
+      image: "/images/products/vasos3d/yellow-glass1.jpg",
+      discount: "21%",
     },
     {
-      title: "fashion Men Pure Cotton Striped",
-      price: "₹1,999.00",
-      oldPrice: "₹2,250.00",
-      image: "/images/products/fashion/shirt-3.jpg",
-      discount: "12%",
+      title: "Vaso 3D Colour Glass Rojo",
+      price: "$24.00",
+      oldPrice: "$29.00",
+      image: "/images/products/vasos3d/colour-glass2.jpg",
+      discount: "17%",
     },
     {
-      title: "fashion Embroidered Satin Saree",
-      price: "₹4,785.00",
-      oldPrice: "₹5,500.00",
-      image: "/images/products/fashion/shirt-4.jpg",
-      discount: "13%",
-    },
-  ],
-  electronics: [
-    {
-      title: "electronics Embroidered Shirt",
-      price: "₹1,955.00",
-      oldPrice: "₹1,999.00",
-      image: "/images/products/fashion/shirt-5.jpg",
-      discount: "12%",
-    },
-    {
-      title: "electronics Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-6.jpg",
-      discount: "10%",
-    },
-    {
-      title: "electronics Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-7.jpg",
-      discount: "10%",
-    },
-    {
-      title: "electronics Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-8.jpg",
-      discount: "10%",
+      title: "Vaso 3D Amarillo-Rojo",
+      price: "$26.00",
+      oldPrice: "$32.00",
+      image: "/images/products/vasos3d/yellow-red-glass.jpg",
+      discount: "19%",
     },
   ],
-  beauty: [
+  navi: [
     {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-9.jpg",
-      discount: "10%",
+      title: "Placa Navi Honda",
+      price: "$45.00",
+      oldPrice: "$55.00",
+      image: "/images/products/navi/honda.jpg",
+      discount: "18%",
     },
     {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-10.jpg",
-      discount: "10%",
+      title: "Placa Navi Decorativa",
+      price: "$38.00",
+      oldPrice: "$48.00",
+      image: "/images/products/navi/placa-navi2.jpg",
+      discount: "21%",
     },
     {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-11.jpg",
-      discount: "10%",
+      title: "Placa Navi Estilo Clásico",
+      price: "$42.00",
+      oldPrice: "$52.00",
+      image: "/images/products/navi/placa-navi3.jpg",
+      discount: "19%",
     },
     {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-12.jpg",
-      discount: "10%",
+      title: "Placa Navi Moderna",
+      price: "$40.00",
+      oldPrice: "$50.00",
+      image: "/images/products/navi/placa-navi4.jpg",
+      discount: "20%",
+    },
+  ],
+  figuras: [
+    {
+      title: "Bender Chulo",
+      price: "$35.00",
+      oldPrice: "$45.00",
+      image: "/images/img/Bender-Chulo.jpg",
+      discount: "22%",
     },
     {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-13.jpg",
-      discount: "10%",
+      title: "Figura Unknown 1",
+      price: "$28.00",
+      oldPrice: "$38.00",
+      image: "/images/img/Unknow_1.jpg",
+      discount: "26%",
     },
     {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-14.jpg",
-      discount: "10%",
+      title: "Figura Unknown 2 Weapon",
+      price: "$32.00",
+      oldPrice: "$42.00",
+      image: "/images/img/Unknow_2 weapon.jpg",
+      discount: "24%",
     },
     {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-14.jpg",
-      discount: "10%",
-    },
-    {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-14.jpg",
-      discount: "10%",
-    },
-    {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-14.jpg",
-      discount: "10%",
-    },
-    {
-      title: "beauty Extra Shirt",
-      price: "₹2,250.00",
-      oldPrice: "₹2,500.00",
-      image: "/images/products/fashion/shirt-14.jpg",
-      discount: "10%",
+      title: "Figura Unknown 3",
+      price: "$30.00",
+      oldPrice: "$40.00",
+      image: "/images/img/Unknow_3.jpg",
+      discount: "25%",
     },
   ],
 };
@@ -139,7 +97,7 @@ const categories = Object.keys(data);
 
 function PopularProducts() {
   const carouselRef = useRef();
-  const [activeCategory, setActiveCategory] = useState("fashion");
+  const [activeCategory, setActiveCategory] = useState("vasos3d");
   const products = data[activeCategory];
 
   const scroll = (direction) => {
@@ -152,9 +110,9 @@ function PopularProducts() {
 
   return (
     <section className="relative px-6 py-8">
-      <h2 className="text-2xl font-bold mb-1">Popular Products</h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Do not miss the current offers until the end of the month.
+      <h2 className="text-2xl font-bold mb-1 text-black drop-shadow-lg">Productos Populares</h2>
+      <p className="text-sm text-gray-700 mb-4 drop-shadow-md">
+        No te pierdas las ofertas actuales hasta fin de mes.
       </p>
 
       {/* Categorías */}
@@ -165,9 +123,9 @@ function PopularProducts() {
             onClick={() => setActiveCategory(cat)}
             className={`uppercase text-sm font-semibold ${
               activeCategory === cat
-                ? "text-red-500 border-b-2 border-red-500"
-                : "text-gray-500 hover:text-red-400"
-            } pb-1 transition`}
+                ? "text-white border-b-2 border-white"
+                : "text-gray-300 hover:text-white"
+            } pb-1 transition-colors`}
           >
             {cat}
           </button>
@@ -177,7 +135,7 @@ function PopularProducts() {
       {/* Flecha Izquierda */}
       <button
         onClick={() => scroll("left")}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full hover:scale-105"
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-2 rounded-full hover:scale-105 border border-white/30"
       >
         <ChevronLeft />
       </button>
@@ -190,7 +148,7 @@ function PopularProducts() {
         {products.map((product, index) => (
           <div
             key={index}
-            className="min-w-[250px] bg-white rounded-lg shadow p-4 flex-shrink-0 relative"
+            className="min-w-[250px] bg-white rounded-xl shadow-lg p-4 flex-shrink-0 relative border border-gray-200"
           >
             <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
               {product.discount}
@@ -217,7 +175,7 @@ function PopularProducts() {
       {/* Flecha Derecha */}
       <button
         onClick={() => scroll("right")}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white shadow p-2 rounded-full hover:scale-105"
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-2 rounded-full hover:scale-105 border border-white/30"
       >
         <ChevronRight />
       </button>
