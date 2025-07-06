@@ -18,7 +18,7 @@ const data = {
       discount: "21%",
     },
     {
-      title: "Vaso 3D  Rojo",
+      title: "Vaso 3D Rojo",
       price: "$24.00",
       oldPrice: "$29.00",
       image: "/images/products/vasos3d/colour-glass2.jpg",
@@ -71,14 +71,14 @@ const data = {
       discount: "22%",
     },
     {
-      title: "Figura Unknown 1",
+      title: "Robot Taladro 1",
       price: "$28.00",
       oldPrice: "$38.00",
       image: "/images/products/robots/Unknow_1.jpg",
       discount: "26%",
     },
     {
-      title: "Figura Unknown 2 Weapon",
+      title: "Robot Taladro 2",
       price: "$32.00",
       oldPrice: "$42.00",
       image: "/images/products/robots/Unknow_2.jpg",
@@ -86,6 +86,7 @@ const data = {
     },
   ],
 };
+
 const categories = Object.keys(data);
 
 function PopularProducts() {
@@ -96,14 +97,15 @@ function PopularProducts() {
   const scroll = (direction) => {
     const container = carouselRef.current;
     const scrollAmount = 300;
-    direction === "left"
-      ? (container.scrollLeft -= scrollAmount)
-      : (container.scrollLeft += scrollAmount);
+    if (!container) return;
+    container.scrollLeft += direction === "left" ? -scrollAmount : scrollAmount;
   };
 
   return (
     <section className="relative px-6 py-8">
-      <h2 className="text-2xl font-bold mb-1 text-black drop-shadow-lg">Productos Populares</h2>
+      <h2 className="text-2xl font-bold mb-1 text-black drop-shadow-lg">
+        Productos Populares
+      </h2>
       <p className="text-sm text-gray-700 mb-4 drop-shadow-md">
         No te pierdas las ofertas actuales hasta fin de mes.
       </p>
@@ -136,33 +138,48 @@ function PopularProducts() {
       {/* Carrusel de productos */}
       <div
         ref={carouselRef}
-        className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar"
+        className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-2 pl-2 pr-10"
       >
         {products.map((product, index) => (
           <div
             key={index}
-            className="min-w-[250px] bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-4 flex-shrink-0 relative border border-gray-200"
+            className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] bg-white backdrop-blur-sm rounded-2xl shadow-md p-4 flex-shrink-0 relative border border-gray-200 transition hover:shadow-xl"
           >
-            <span className="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">
+            <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow">
               {product.discount}
             </span>
-            <div className="w-40 h-40 flex items-center justify-center mb-2 bg-gray-100/80 rounded-lg overflow-hidden">
+
+            <div className="w-full h-48 flex items-center justify-center mb-4 bg-gray-100 rounded-xl overflow-hidden">
               <img
                 src={product.image}
                 alt={product.title}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
               />
             </div>
-            <h3 className="font-semibold text-sm truncate">{product.title}</h3>
-            <div className="flex items-center gap-2">
-              <span className="text-red-600 font-bold">{product.price}</span>
+
+            <h3 className="font-medium text-sm text-gray-800 mb-1 truncate">
+              {product.title}
+            </h3>
+
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-red-600 font-bold text-base">{product.price}</span>
               <span className="line-through text-gray-400 text-sm">
                 {product.oldPrice}
               </span>
             </div>
-            <button className="mt-3 w-full border border-red-500 text-red-500 px-4 py-1 rounded hover:bg-red-500 hover:text-white transition flex items-center justify-center gap-2">
-              🛒 Add to Cart
-            </button>
+
+            <div className="flex flex-col gap-2">
+              <button className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2">
+                🛒 Añadir al Carrito
+              </button>
+
+              <button
+                className="w-full border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-xl hover:bg-gray-100 transition flex items-center justify-center gap-2"
+                onClick={() => console.log(`Ver detalles de ${product.title}`)}
+              >
+                🔍 Más Detalles
+              </button>
+            </div>
           </div>
         ))}
       </div>

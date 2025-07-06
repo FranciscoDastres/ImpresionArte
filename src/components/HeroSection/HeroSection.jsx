@@ -16,14 +16,14 @@ function HeroSection() {
       id: 2,
       title: "Navi - Placas Personalizadas",
       subtitle: "Placas decorativas para tu hogar con estilo único",
-      buttonText: "Explorar",
+      buttonText: "Ver Colección",
       image: "/images/products/navi/placa-navi.jpg",
     },
     {
       id: 3,
       title: "Bender - Figuras Coleccionables",
       subtitle: "Personajes únicos para tu colección",
-      buttonText: "Descubrir",
+      buttonText: "Ver Colección",
       image: "/images/products/futurama/bender-chulo.jpg",
     },
   ];
