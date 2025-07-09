@@ -102,7 +102,7 @@ function PopularProducts() {
   };
 
   return (
-    <section className="relative px-6 py-8">
+    <section className="relative px-2 sm:px-6 py-8">
       <h2 className="text-2xl font-bold mb-1 text-black drop-shadow-lg">
         Productos Populares
       </h2>
@@ -130,7 +130,7 @@ function PopularProducts() {
       {/* Flecha Izquierda */}
       <button
         onClick={() => scroll("left")}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-2 rounded-full hover:scale-105 border border-white/30"
+        className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
       >
         <ChevronLeft />
       </button>
@@ -187,7 +187,7 @@ function PopularProducts() {
       {/* Flecha Derecha */}
       <button
         onClick={() => scroll("right")}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-2 rounded-full hover:scale-105 border border-white/30"
+        className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
       >
         <ChevronRight />
       </button>

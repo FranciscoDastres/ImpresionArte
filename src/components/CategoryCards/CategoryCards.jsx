@@ -13,7 +13,7 @@ function CategoryCards() {
 
   return (
     <section className="w-full px-4 py-2">
-      <div className="mx-auto grid grid-cols-3 gap-2 justify-center" style={{maxWidth: '600px'}}>
+      <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 justify-center" style={{maxWidth: '600px'}}>
         {categories.map((category) => (
           <div
             key={category.id}

@@ -103,13 +103,7 @@ function HeroSection() {
                   {/* Columna derecha - Imagen */}
                   <div className="flex justify-center items-center p-4 md:p-8">
                     <div 
-                      className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-500"
-                      style={{
-                        width: "350px",
-                        height: "400px",
-                        minWidth: "350px",
-                        minHeight: "400px"
-                      }}
+                      className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-500 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:w-[300px] xl:h-[340px] xl:min-w-[300px] xl:min-h-[340px] h-[60vw] max-h-[400px] min-h-[200px]"
                     >
                       <img
                         src={slide.image}
