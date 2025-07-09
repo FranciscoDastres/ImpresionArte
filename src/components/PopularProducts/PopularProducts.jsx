@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const data = {
   vasos3d: [
@@ -93,6 +94,7 @@ function PopularProducts() {
   const carouselRef = useRef();
   const [activeCategory, setActiveCategory] = useState("vasos3d");
   const products = data[activeCategory];
+  const navigate = useNavigate();
 
   const scroll = (direction) => {
     const container = carouselRef.current;
@@ -175,7 +177,7 @@ function PopularProducts() {
 
               <button
                 className="w-full border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-xl hover:bg-gray-100 transition flex items-center justify-center gap-2"
-                onClick={() => console.log(`Ver detalles de ${product.title}`)}
+                onClick={() => navigate(`/producto/${encodeURIComponent(product.title)}`)}
               >
                 🔍 Más Detalles
               </button>
