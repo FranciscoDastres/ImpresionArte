@@ -96,11 +96,6 @@ function Header() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden px-4 pb-4 space-y-3 border-b border-gray-200 bg-white">
-          <input
-            type="text"
-            placeholder="Buscar productos..."
-            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-800 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm border border-gray-200"
-          />
           <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Login</a>
           <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Register</a>
           <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Favoritos</a>
