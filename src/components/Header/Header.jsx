@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu, X, ShoppingCart, Heart, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const sidebarCategories = [
   { name: "Vasos 3D" },
@@ -72,9 +73,9 @@ function Header() {
 
             {/* Right Side */}
             <div className="hidden md:flex items-center space-x-4">
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</a>
-              <a className="text-gray-400">|</a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 transition-colors">Registro</a>
+              <Link to="/login" className="text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</Link>
+              <span className="text-gray-400">|</span>
+              <Link to="/register" className="text-gray-700 hover:text-blue-600 transition-colors">Registro</Link>
               <button className="p-2 hover:text-blue-600 transition-colors">
                 <Heart className="w-5 h-5" />
               </button>
@@ -96,8 +97,8 @@ function Header() {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden px-4 pb-4 space-y-3 border-b border-gray-200 bg-white">
-          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Login</a>
-          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Register</a>
+          <Link to="/login" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</Link>
+          <Link to="/register" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Registro</Link>
           <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Favoritos</a>
           <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Carrito</a>
           <div className="pt-2 border-t border-gray-200">

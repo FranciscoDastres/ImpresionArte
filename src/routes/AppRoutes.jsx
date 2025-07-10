@@ -1,26 +1,29 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import Layout from "../components/Layout/Layout";
 import Home from "../pages/Home";
-import ProductList from "../pages/ProductList";
 import ProductDetail from "../pages/ProductDetail";
-import Cart from "../pages/Cart";
-import Checkout from "../pages/Checkout";
-import Sucess from "../pages/Sucess";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../components/NotFound/NotFound";
 
+// Componentes vacíos para las páginas que faltan
+const ProductList = () => <div className="text-center p-8 text-2xl">Página de listado de productos (en construcción)</div>;
+const Cart = () => <div className="text-center p-8 text-2xl">Carrito de compras (en construcción)</div>;
+const Checkout = () => <div className="text-center p-8 text-2xl">Checkout (en construcción)</div>;
+const Sucess = () => <div className="text-center p-8 text-2xl">¡Compra exitosa! (en construcción)</div>;
+
 const AppRoutes = () => (
   <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/productos" element={<ProductList />} />
-    <Route path="/producto/:productId" element={<ProductDetail />} />
-    <Route path="/carrito" element={<Cart />} />
-    <Route path="/checkout" element={<Checkout />} />
-    <Route path="/sucess" element={<Sucess />} />
+    <Route path="/" element={<Layout><Home /></Layout>} />
+    <Route path="/productos" element={<Layout><ProductList /></Layout>} />
+    <Route path="/producto/:productId" element={<Layout><ProductDetail /></Layout>} />
+    <Route path="/carrito" element={<Layout><Cart /></Layout>} />
+    <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
+    <Route path="/sucess" element={<Layout><Sucess /></Layout>} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
-    <Route path="*" element={<NotFound />} />
+    <Route path="*" element={<Layout><NotFound /></Layout>} />
   </Routes>
 );
 

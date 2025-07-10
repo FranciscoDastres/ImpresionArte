@@ -13,12 +13,16 @@ function CategoryCards() {
 
   return (
     <section className="w-full px-4 py-2">
-      <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 justify-center" style={{maxWidth: '600px'}}>
+      {/* Mobile: slider horizontal, Desktop: grid */}
+      <div
+        className="flex gap-3 overflow-x-auto scroll-smooth no-scrollbar md:grid md:grid-cols-3 md:gap-2 md:overflow-visible md:scroll-auto justify-center mx-auto"
+        style={{ maxWidth: '600px' }}
+      >
         {categories.map((category) => (
           <div
             key={category.id}
             onClick={() => handleCategoryClick(category.name)}
-            className="bg-white/90 backdrop-blur-sm aspect-square shadow-lg border border-gray-200 p-4 sm:p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-xl"
+            className="bg-white/90 backdrop-blur-sm aspect-square shadow-lg border border-gray-200 p-4 sm:p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-xl min-w-[140px] md:min-w-0"
           >
             <div className={`${category.bgColor} w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center mb-4`}>
               <span className={`text-3xl sm:text-4xl ${category.iconColor}`}>{category.icon}</span>

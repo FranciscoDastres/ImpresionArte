@@ -23,13 +23,12 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen flex-col lg:flex-row bg-white">
       {/* Panel Izquierdo: Formulario */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center bg-white">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center items-center bg-white py-8 px-4 sm:px-8 min-h-[60vh]">
         {/* Logo y título */}
-        <div className="w-full max-w-md mx-auto flex flex-col items-start px-8 pt-8">
-          <div className="flex items-center mb-8">
-            {/* Logo SVG tipo caja */}
+        <div className="w-full max-w-md mx-auto flex flex-col items-start pt-4 sm:pt-8">
+          <button className="flex items-center mb-8 group" onClick={() => navigate("/")}>
             <span className="mr-2">
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="4" y="8" width="24" height="16" rx="3" fill="#2563eb"/>
@@ -37,13 +36,13 @@ export default function Login() {
                 <rect x="12" y="16" width="8" height="4" rx="1" fill="#2563eb"/>
               </svg>
             </span>
-            <span className="text-2xl font-bold text-gray-800">ImpresionArte</span>
-          </div>
+            <span className="text-2xl font-bold text-gray-800 group-hover:text-blue-700 transition-colors">ImpresionArte</span>
+          </button>
           <span className="text-gray-500 mb-1">Comienza tu experiencia</span>
           <h2 className="text-2xl font-bold mb-6">Inicia sesión en ImpresionArte</h2>
         </div>
         {/* Formulario */}
-        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto px-8 space-y-4">
+        <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-4">
           {message && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
               <span className="block sm:inline">{message}</span>
@@ -120,8 +119,7 @@ export default function Login() {
             </button>
           </div>
         </form>
-        {/* Pie de página */}
-        <div className="mt-8 text-sm text-gray-500 text-center w-full max-w-md mx-auto px-8">
+        <div className="mt-8 text-sm text-gray-500 text-center w-full max-w-md mx-auto px-4 sm:px-8">
           <p>
             ¿No tienes cuenta?{' '}
             <button type="button" className="text-blue-600 hover:underline" onClick={() => navigate('/register')}>Regístrate aquí</button>
@@ -129,7 +127,7 @@ export default function Login() {
         </div>
       </div>
       {/* Panel Derecho: Imagen de fondo */}
-      <div className="hidden lg:block w-1/2 h-full">
+      <div className="hidden md:block w-full lg:w-1/2 h-64 md:h-auto">
         <img
           src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80"
           alt="Fondo login"
