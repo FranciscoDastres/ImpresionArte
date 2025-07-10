@@ -9,12 +9,12 @@ function TopBanner() {
         <ul className="flex gap-3">
           <li>
             <a href="#" className="hover:text-blue-200 transition-colors duration-200">
-              Help Center
+              Centro de Ayuda
             </a>
           </li>
           <li>
             <a href="#" className="hover:text-blue-200 transition-colors duration-200">
-              Order Tracking
+              Seguimiento de Orden
             </a>
           </li>
         </ul>
