@@ -1,92 +1,123 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import RelatedProducts from "../components/RelatedProducts/RelatedProducts";
-
-// Datos de ejemplo (puedes reemplazar por fetch a la API si lo deseas)
-const data = {
-  "Vaso 3D Verde": {
-    title: "Vaso 3D Verde",
-    price: "$25.00",
-    oldPrice: "$30.00",
-    images: [
-      "/images/products/vasos3d/green-glass.jpg",
-      "/images/products/vasos3d/colour-glass1.jpg"
-    ],
-    description: "Vaso 3D personalizado en color verde, ideal para bebidas frías y calientes.",
-    discount: "17%"
-  },
-  "Placa Navi Honda": {
-    title: "Placa Navi Honda",
-    price: "$45.00",
-    oldPrice: "$55.00",
-    images: [
-      "/images/products/navi/honda.jpg",
-      "/images/products/navi/placa-navi.jpg"
-    ],
-    description: "Placa decorativa Navi modelo Honda, perfecta para tu hogar.",
-    discount: "18%"
-  },
-  // ...agrega los demás productos aquí
-};
+import ApiService from "../services/api";
 
 export default function ProductDetail() {
   const { productId } = useParams();
-  const decodedId = decodeURIComponent(productId);
-  const product = data[decodedId];
-  const [selectedImg, setSelectedImg] = useState(product?.images[0] || "");
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedImg, setSelectedImg] = useState("");
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [productId]);
 
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (!productId) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await ApiService.getProductoPorId(productId);
+        setProduct(data);
+        setSelectedImg(data.imagen_principal);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 text-center">
+        <div className="text-red-600 font-bold mb-4">Error: {error}</div>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+        >
+          Reintentar
+        </button>
+      </div>
+    );
+  }
+
   if (!product) {
     return <div className="p-8 text-center text-black-600 font-bold">Producto no encontrado</div>;
+  }
+
+  // Preparar imágenes para el carrusel
+  const images = [product.imagen_principal];
+  if (product.imagenes_adicionales && product.imagenes_adicionales.length > 0) {
+    images.push(...product.imagenes_adicionales);
   }
 
   return (
     <>
       <div className="max-w-5xl mx-auto p-4 flex flex-col md:flex-row gap-8 border-2 border-black rounded-2xl bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 mt-4">
-
-
-
-
-        {/* Galería vertical + imagen principal */}
-        <div className="flex flex-col md:flex-row w-full md:w-1/2 gap-4 items-center md:items-start">
-          {/* Imagen principal */}
-          <div className="w-[250px] h-[250px] bg-gray-100 rounded-xl overflow-hidden flex items-center justify-center mx-2">
+        {/* Galería de imágenes */}
+        <div className="flex-1">
+          <div className="w-full h-96 bg-white rounded-xl overflow-hidden mb-4">
             <img
               src={selectedImg}
-              alt={product.title}
-              className="object-cover"
-              width={300}
-              height={300}
+              alt={product.titulo}
+              className="w-full h-full object-contain"
             />
           </div>
-          {/* Miniaturas: horizontal en móvil, vertical en desktop */}
-          <div className="flex md:flex-col gap-2 mt-2 md:mt-0 overflow-x-auto md:overflow-x-visible w-full md:w-auto">
-            {product.images.map((img, idx) => (
-              <button
-                key={img}
-                onClick={() => setSelectedImg(img)}
-                className={`w-16 h-16 aspect-square rounded-lg border-2 ${selectedImg === img ? "border-blue-500" : "border-gray-200"} overflow-hidden focus:outline-none flex-shrink-0`}
-              >
-                <img src={img} alt={`Miniatura ${idx + 1}`} className="w-full h-full object-cover" />
-              </button>
-            ))}
-          </div>
+          
+          {/* Miniaturas */}
+          {images.length > 1 && (
+            <div className="flex gap-2 overflow-x-auto">
+              {images.map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImg(img)}
+                  className={`w-20 h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 border-2 ${
+                    selectedImg === img ? 'border-blue-500' : 'border-gray-200'
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt={`${product.titulo} ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-        {/* Detalles del producto */}
+
+        {/* Información del producto */}
         <div className="flex-1 flex flex-col gap-4 justify-center">
-          <h1 className="text-2xl font-bold text-gray-900">{product.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{product.titulo}</h1>
           <div className="flex items-center gap-4">
-            <span className="text-black-600 text-xl font-bold">{product.price}</span>
-            <span className="line-through text-gray-400">{product.oldPrice}</span>
-            <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">{product.discount}</span>
+            <span className="text-black-600 text-xl font-bold">${product.precio}</span>
+            {product.precio_anterior && (
+              <span className="line-through text-gray-400">${product.precio_anterior}</span>
+            )}
+            {product.descuento && (
+              <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                {product.descuento}
+              </span>
+            )}
           </div>
-          <p className="text-gray-700">{product.description}</p>
+          <p className="text-gray-700">{product.descripcion}</p>
           <div className="flex items-center gap-2">
             {/* Selector de cantidad compacto */}
             <div className="flex items-center border rounded-md bg-white h-10 w-20">
@@ -117,8 +148,11 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
+      
       {/* Productos relacionados debajo del detalle */}
-      <RelatedProducts category="vasos3d" />
+      {product.categoria_nombre && (
+        <RelatedProducts category={product.categoria_nombre} />
+      )}
     </>
   );
 }

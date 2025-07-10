@@ -1,100 +1,52 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-const data = {
-  vasos3d: [
-    {
-      title: "Vaso 3D Verde",
-      price: "$25.00",
-      oldPrice: "$30.00",
-      image: "/images/products/vasos3d/green-glass.jpg",
-      discount: "17%",
-    },
-    {
-      title: "Vaso 3D Amarillo",
-      price: "$22.00",
-      oldPrice: "$28.00",
-      image: "/images/products/vasos3d/yellow-glass1.jpg",
-      discount: "21%",
-    },
-    {
-      title: "Vaso 3D Rojo",
-      price: "$24.00",
-      oldPrice: "$29.00",
-      image: "/images/products/vasos3d/colour-glass2.jpg",
-      discount: "17%",
-    },
-    {
-      title: "Vaso 3D Amarillo-Rojo",
-      price: "$26.00",
-      oldPrice: "$32.00",
-      image: "/images/products/vasos3d/yellow-red-glass.jpg",
-      discount: "19%",
-    },
-  ],
-  navi: [
-    {
-      title: "Placa Navi Honda",
-      price: "$45.00",
-      oldPrice: "$55.00",
-      image: "/images/products/navi/honda.jpg",
-      discount: "18%",
-    },
-    {
-      title: "Placa Navi Decorativa",
-      price: "$38.00",
-      oldPrice: "$48.00",
-      image: "/images/products/navi/placa-navi2.jpg",
-      discount: "21%",
-    },
-    {
-      title: "Placa Navi Estilo Clásico",
-      price: "$42.00",
-      oldPrice: "$52.00",
-      image: "/images/products/navi/placa-navi3.jpg",
-      discount: "19%",
-    },
-    {
-      title: "Placa Navi Moderna",
-      price: "$40.00",
-      oldPrice: "$50.00",
-      image: "/images/products/navi/placa-navi4.jpg",
-      discount: "20%",
-    },
-  ],
-  figuras: [
-    {
-      title: "Bender Chulo",
-      price: "$35.00",
-      oldPrice: "$45.00",
-      image: "/images/products/futurama/bender-chulo.jpg",
-      discount: "22%",
-    },
-    {
-      title: "Robot Taladro 1",
-      price: "$28.00",
-      oldPrice: "$38.00",
-      image: "/images/products/robots/Unknow_1.jpg",
-      discount: "26%",
-    },
-    {
-      title: "Robot Taladro 2",
-      price: "$32.00",
-      oldPrice: "$42.00",
-      image: "/images/products/robots/Unknow_2.jpg",
-      discount: "24%",
-    },
-  ],
-};
-
-const categories = Object.keys(data);
+import ApiService from "../../services/api";
 
 function PopularProducts() {
   const carouselRef = useRef();
   const [activeCategory, setActiveCategory] = useState("vasos3d");
-  const products = data[activeCategory];
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  // Cargar categorías
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await ApiService.getCategorias();
+        setCategories(data);
+        if (data.length > 0) {
+          setActiveCategory(data[0].nombre);
+        }
+      } catch (err) {
+        setError('Error al cargar categorías');
+        console.error(err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Cargar productos por categoría
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!activeCategory) return;
+      
+      try {
+        setLoading(true);
+        const data = await ApiService.getProductosPorCategoria(activeCategory);
+        setProducts(data);
+      } catch (err) {
+        setError('Error al cargar productos');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [activeCategory]);
 
   const scroll = (direction) => {
     const container = carouselRef.current;
@@ -102,6 +54,22 @@ function PopularProducts() {
     if (!container) return;
     container.scrollLeft += direction === "left" ? -scrollAmount : scrollAmount;
   };
+
+  if (error) {
+    return (
+      <section className="relative px-2 sm:px-6 py-8">
+        <div className="text-center text-red-600">
+          <p>Error: {error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+          >
+            Reintentar
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative px-2 sm:px-6 py-8">
@@ -116,83 +84,107 @@ function PopularProducts() {
       <div className="flex gap-6 mb-6 overflow-x-auto">
         {categories.map((cat) => (
           <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.nombre)}
             className={`uppercase text-sm font-semibold ${
-              activeCategory === cat
+              activeCategory === cat.nombre
                 ? "text-black border-b-2 border-black"
                 : "text-gray-700 hover:text-black"
             } pb-1 transition-colors`}
           >
-            {cat}
+            {cat.nombre}
           </button>
         ))}
       </div>
 
+      {/* Loading state */}
+      {loading && (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      )}
+
       {/* Flecha Izquierda */}
-      <button
-        onClick={() => scroll("left")}
-        className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
-      >
-        <ChevronLeft />
-      </button>
+      {!loading && products.length > 0 && (
+        <button
+          onClick={() => scroll("left")}
+          className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
+        >
+          <ChevronLeft />
+        </button>
+      )}
 
       {/* Carrusel de productos */}
-      <div
-        ref={carouselRef}
-        className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-2 pl-2 pr-10"
-      >
-        {products.map((product, index) => (
-          <div
-            key={index}
-            className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] bg-white backdrop-blur-sm rounded-2xl shadow-md p-4 flex-shrink-0 relative border border-gray-200 transition hover:shadow-xl"
-          >
-            <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow">
-              {product.discount}
-            </span>
+      {!loading && (
+        <div
+          ref={carouselRef}
+          className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar pb-2 pl-2 pr-10"
+        >
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="min-w-[260px] sm:min-w-[280px] md:min-w-[300px] bg-white backdrop-blur-sm rounded-2xl shadow-md p-4 flex-shrink-0 relative border border-gray-200 transition hover:shadow-xl"
+            >
+              {product.descuento && (
+                <span className="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full shadow">
+                  {product.descuento}
+                </span>
+              )}
 
-            <div className="w-full h-48 flex items-center justify-center mb-4 bg-gray-100 rounded-xl overflow-hidden">
-              <img
-                src={product.image}
-                alt={product.title}
-                className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
-              />
+              <div className="w-full h-48 flex items-center justify-center mb-4 bg-gray-100 rounded-xl overflow-hidden">
+                <img
+                  src={product.imagen_principal}
+                  alt={product.titulo}
+                  className="w-full h-full object-contain transition-transform duration-300 hover:scale-105"
+                />
+              </div>
+
+              <h3 className="font-medium text-sm text-gray-800 mb-1 truncate">
+                {product.titulo}
+              </h3>
+
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-red-600 font-bold text-base">${product.precio}</span>
+                {product.precio_anterior && (
+                  <span className="line-through text-gray-400 text-sm">
+                    ${product.precio_anterior}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <button className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2">
+                  🛒 Añadir al Carrito
+                </button>
+
+                <button
+                  className="w-full border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-xl hover:bg-gray-100 transition flex items-center justify-center gap-2"
+                  onClick={() => navigate(`/producto/${product.id}`)}
+                >
+                  🔍 Más Detalles
+                </button>
+              </div>
             </div>
+          ))}
+        </div>
+      )}
 
-            <h3 className="font-medium text-sm text-gray-800 mb-1 truncate">
-              {product.title}
-            </h3>
-
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-red-600 font-bold text-base">{product.price}</span>
-              <span className="line-through text-gray-400 text-sm">
-                {product.oldPrice}
-              </span>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <button className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2">
-                🛒 Añadir al Carrito
-              </button>
-
-              <button
-                className="w-full border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-xl hover:bg-gray-100 transition flex items-center justify-center gap-2"
-                onClick={() => navigate(`/producto/${encodeURIComponent(product.title)}`)}
-              >
-                🔍 Más Detalles
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* Mensaje cuando no hay productos */}
+      {!loading && products.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          <p>No hay productos disponibles en esta categoría.</p>
+        </div>
+      )}
 
       {/* Flecha Derecha */}
-      <button
-        onClick={() => scroll("right")}
-        className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
-      >
-        <ChevronRight />
-      </button>
+      {!loading && products.length > 0 && (
+        <button
+          onClick={() => scroll("right")}
+          className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
+        >
+          <ChevronRight />
+        </button>
+      )}
     </section>
   );
 }

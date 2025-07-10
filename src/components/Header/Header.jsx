@@ -1,36 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, ShoppingCart, Heart, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const sidebarCategories = [
-  { name: "Vasos 3D" },
-  { name: "Placas Navi" },
-  { name: "Figuras" },
-];
+import ApiService from "../../services/api";
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const categories = [
-    {
-      name: "Vasos 3D",
-      description: "Vasos personalizados en 3D",
-      href: "/categoria/vasos-3d",
-    },
-    {
-      name: "Placas Navi",
-      description: "Placas decorativas Navi",
-      href: "/categoria/placas-navi",
-    },
-    {
-      name: "Figuras",
-      description: "Figuras coleccionables 3D",
-      href: "/categoria/figuras",
-    },
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await ApiService.getCategorias();
+        setCategories(data);
+      } catch (err) {
+        setError('Error al cargar categorías');
+        console.error(err);
+        // Usar categorías por defecto en caso de error
+        setCategories([
+          {
+            id: 1,
+            nombre: "Vasos 3D",
+            descripcion: "Vasos personalizados en 3D",
+          },
+          {
+            id: 2,
+            nombre: "Placas Navi",
+            descripcion: "Placas decorativas Navi",
+          },
+          {
+            id: 3,
+            nombre: "Figuras",
+            descripcion: "Figuras coleccionables 3D",
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <div className="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200">
@@ -103,15 +118,22 @@ function Header() {
           <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Carrito</a>
           <div className="pt-2 border-t border-gray-200">
             <div className="text-sm font-medium text-gray-900 mb-2">Categorías</div>
-            {categories.map((category) => (
-              <a
-                key={category.name}
-                href={category.href}
-                className="block text-sm text-gray-700 hover:text-blue-600 transition-colors py-1"
-              >
-                {category.name}
-              </a>
-            ))}
+            {loading ? (
+              <div className="text-sm text-gray-500">Cargando categorías...</div>
+            ) : error ? (
+              <div className="text-sm text-red-500">Error al cargar categorías</div>
+            ) : (
+              categories.map((category) => (
+                <Link
+                  key={category.id}
+                  to={`/productos?categoria=${encodeURIComponent(category.nombre)}`}
+                  className="block text-sm text-gray-700 hover:text-blue-600 transition-colors py-1"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {category.nombre}
+                </Link>
+              ))
+            )}
           </div>
         </div>
       )}
@@ -167,11 +189,14 @@ function Header() {
                     </div>
                     <div className="flex-1 overflow-y-auto px-6 py-4">
                       <ul className="space-y-2">
-                        {sidebarCategories.map((cat) => (
-                          <li key={cat.name}>
-                            <a href="#" className="text-gray-700 hover:text-blue-600 text-base font-medium py-2 px-2 rounded transition block">
-                              {cat.name}
-                            </a>
+                        {categories.map((cat) => (
+                          <li key={cat.id}>
+                            <Link
+                              to={`/productos?categoria=${encodeURIComponent(cat.nombre)}`}
+                              className="text-gray-700 hover:text-blue-600 text-base font-medium py-2 px-2 rounded transition block"
+                            >
+                              {cat.nombre}
+                            </Link>
                           </li>
                         ))}
                       </ul>
@@ -183,13 +208,13 @@ function Header() {
               {/* Enlaces directos a categorías */}
               <div className="flex space-x-6">
                 {categories.map((category) => (
-                  <a
-                    key={category.name}
-                    href={category.href}
+                  <Link
+                    key={category.id}
+                    to={`/productos?categoria=${encodeURIComponent(category.nombre)}`}
                     className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
                   >
-                    {category.name}
-                  </a>
+                    {category.nombre}
+                  </Link>
                 ))}
               </div>
             </div>
