@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X, ShoppingCart, Heart, ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ApiService from "../../services/api";
 import { useCart } from "../../contexts/CartContext";
 
@@ -14,6 +14,7 @@ function Header() {
   const [error, setError] = useState(null);
   const { cart, cartCount, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart();
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -289,7 +290,9 @@ function Header() {
               <span>Total:</span>
               <span>${cartTotal.toFixed(2)}</span>
             </div>
-            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition mb-2">Ir a pagar</button>
+            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition mb-2" onClick={() => { setCartSidebarOpen(false); navigate('/checkout'); }}>
+              Ir a pagar
+            </button>
             <button className="w-full text-xs text-gray-500 underline" onClick={clearCart}>Vaciar carrito</button>
           </div>
         )}
