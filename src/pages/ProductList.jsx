@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ApiService from "../services/api";
+import { useCart } from "../contexts/CartContext";
 
 function ProductList() {
   const [searchParams] = useSearchParams();
@@ -14,6 +15,7 @@ function ProductList() {
   const [productsPerPage] = useState(12);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("newest");
+  const { addToCart } = useCart();
 
   const categoriaParam = searchParams.get("categoria");
 
@@ -206,7 +208,9 @@ function ProductList() {
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <button className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2">
+                    <button className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2"
+                      onClick={() => addToCart(product)}
+                    >
                       🛒 Añadir al Carrito
                     </button>
 

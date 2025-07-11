@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import RelatedProducts from "../components/RelatedProducts/RelatedProducts";
 import ApiService from "../services/api";
+import { useCart } from "../contexts/CartContext";
 
 export default function ProductDetail() {
   const { productId } = useParams();
@@ -11,6 +12,7 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [selectedImg, setSelectedImg] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -142,7 +144,19 @@ export default function ProductDetail() {
               </div>
             </div>
             {/* Botón agregar al carrito */}
-            <button className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition-colors font-semibold text-base min-w-[150px]">
+            <button
+              className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 transition-colors font-semibold text-base min-w-[150px]"
+              onClick={() => {
+                for (let i = 0; i < quantity; i++) {
+                  addToCart({
+                    id: product.id,
+                    nombre: product.titulo,
+                    precio: product.precio,
+                    imagen: product.imagen_principal
+                  });
+                }
+              }}
+            >
               Añadir al carrito
             </button>
           </div>

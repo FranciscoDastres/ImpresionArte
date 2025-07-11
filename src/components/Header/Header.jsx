@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ShoppingCart, Heart, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import ApiService from "../../services/api";
+import { useCart } from "../../contexts/CartContext";
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,6 +12,8 @@ function Header() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { cart, cartCount, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart();
+  const [cartSidebarOpen, setCartSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -91,11 +94,13 @@ function Header() {
               <Link to="/login" className="text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</Link>
               <span className="text-gray-400">|</span>
               <Link to="/register" className="text-gray-700 hover:text-blue-600 transition-colors">Registro</Link>
-              <button className="p-2 hover:text-blue-600 transition-colors">
-                <Heart className="w-5 h-5" />
-              </button>
-              <button className="p-2 hover:text-blue-600 transition-colors">
+              <button className="p-2 hover:text-blue-600 transition-colors relative" onClick={() => setCartSidebarOpen(true)}>
                 <ShoppingCart className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
               </button>
             </div>
 
@@ -233,6 +238,69 @@ function Header() {
           </div>
         </div>
       </nav>
+
+      {/* Sidebar Carrito */}
+      <div
+        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${
+          cartSidebarOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center space-x-2">
+            <ShoppingCart className="w-6 h-6 text-blue-500" />
+            <span className="font-bold text-lg text-gray-800">Carrito de compras</span>
+          </div>
+          <button onClick={() => setCartSidebarOpen(false)}>
+            <X className="w-6 h-6 text-gray-600" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          {cart.length === 0 ? (
+            <div className="text-gray-500 text-center mt-10">Tu carrito está vacío.</div>
+          ) : (
+            <ul className="space-y-4">
+              {cart.map((item) => (
+                <li key={item.id} className="flex items-center justify-between border-b pb-2">
+                  <div className="flex items-center space-x-3">
+                    {item.imagen && (
+                      <img src={item.imagen} alt={item.nombre} className="w-12 h-12 object-cover rounded" />
+                    )}
+                    <div>
+                      <div className="font-medium text-gray-800">{item.nombre}</div>
+                      <div className="text-xs text-gray-500">${item.precio} x {item.quantity}</div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <div className="flex items-center space-x-1">
+                      <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2">-</button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2">+</button>
+                    </div>
+                    <button onClick={() => removeFromCart(item.id)} className="text-xs text-red-500 mt-1">Quitar</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {cart.length > 0 && (
+          <div className="border-t px-6 py-4">
+            <div className="flex justify-between font-semibold text-gray-800 mb-2">
+              <span>Total:</span>
+              <span>${cartTotal.toFixed(2)}</span>
+            </div>
+            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition mb-2">Ir a pagar</button>
+            <button className="w-full text-xs text-gray-500 underline" onClick={clearCart}>Vaciar carrito</button>
+          </div>
+        )}
+      </div>
+      {/* Overlay para cerrar el slide */}
+      {cartSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+          onClick={() => setCartSidebarOpen(false)}
+        />
+      )}
     </div>
   );
 }

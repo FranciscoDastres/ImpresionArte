@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ApiService from "../../services/api";
+import { useCart } from "../../contexts/CartContext";
 
 function RelatedProducts({ category = "vasos3d" }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -81,7 +83,10 @@ function RelatedProducts({ category = "vasos3d" }) {
               </div>
 
               <div className="flex flex-col gap-2">
-                <button className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2">
+                <button
+                  className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2"
+                  onClick={() => addToCart(product)}
+                >
                   🛒 Añadir al Carrito
                 </button>
 

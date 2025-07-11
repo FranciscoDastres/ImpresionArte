@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/api";
+import { useCart } from "../../contexts/CartContext";
 
 function PopularProducts() {
   const carouselRef = useRef();
@@ -11,6 +12,7 @@ function PopularProducts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   // Cargar categorías
   useEffect(() => {
@@ -153,7 +155,10 @@ function PopularProducts() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <button className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2">
+                <button
+                  className="w-full bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2"
+                  onClick={() => addToCart(product)}
+                >
                   🛒 Añadir al Carrito
                 </button>
 
