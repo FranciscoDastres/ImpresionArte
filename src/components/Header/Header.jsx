@@ -15,6 +15,7 @@ function Header() {
   const { cart, cartCount, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart();
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -268,7 +269,7 @@ function Header() {
                     )}
                     <div>
                       <div className="font-medium text-gray-800">{item.nombre}</div>
-                      <div className="text-xs text-gray-500">${item.precio} x {item.quantity}</div>
+                      <div className="text-xs text-gray-500">{CLP.format(item.precio)} x {item.quantity}</div>
                     </div>
                   </div>
                   <div className="flex flex-col items-end">
@@ -288,9 +289,9 @@ function Header() {
           <div className="border-t px-6 py-4">
             <div className="flex justify-between font-semibold text-gray-800 mb-2">
               <span>Total:</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>{CLP.format(cartTotal)}</span>
             </div>
-            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition mb-2" onClick={() => { setCartSidebarOpen(false); navigate('/checkout'); }}>
+            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition mb-2" onClick={() => { setCartSidebarOpen(false); navigate('/checkout'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               Ir a pagar
             </button>
             <button className="w-full text-xs text-gray-500 underline" onClick={clearCart}>Vaciar carrito</button>
