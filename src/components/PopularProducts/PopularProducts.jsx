@@ -36,7 +36,6 @@ function PopularProducts() {
   useEffect(() => {
     const fetchProducts = async () => {
       if (!activeCategory) return;
-      
       try {
         setLoading(true);
         const data = await ApiService.getProductosPorCategoria(activeCategory);
@@ -63,8 +62,8 @@ function PopularProducts() {
       <section className="relative px-2 sm:px-6 py-8">
         <div className="text-center text-red-600">
           <p>Error: {error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
           >
             Reintentar
@@ -89,18 +88,17 @@ function PopularProducts() {
           <button
             key={cat.id}
             onClick={() => setActiveCategory(cat.nombre)}
-            className={`uppercase text-sm font-semibold ${
-              activeCategory === cat.nombre
+            className={`uppercase text-sm font-semibold ${activeCategory === cat.nombre
                 ? "text-black border-b-2 border-black"
                 : "text-gray-700 hover:text-black"
-            } pb-1 transition-colors`}
+              } pb-1 transition-colors`}
           >
             {cat.nombre}
           </button>
         ))}
       </div>
 
-      {/* Loading state */}
+      {/* Loading */}
       {loading && (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
@@ -121,7 +119,8 @@ function PopularProducts() {
       {!loading && (
         <div
           ref={carouselRef}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[5px] pb-2 pl-2 pr-10"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 xl:gap-4 pb-2 pl-2 pr-10 xl:pr-20"
+
         >
           {products.map((product) => (
             <div
@@ -171,7 +170,7 @@ function PopularProducts() {
         </div>
       )}
 
-      {/* Mensaje cuando no hay productos */}
+      {/* Sin productos */}
       {!loading && products.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <p>No hay productos disponibles en esta categoría.</p>
