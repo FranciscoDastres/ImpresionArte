@@ -70,6 +70,8 @@ export default function ProductDetail() {
     images.push(...product.imagenes_adicionales);
   }
 
+  const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+
   return (
     <>
       <div className="max-w-5xl mx-auto p-4 flex flex-col md:flex-row gap-8 border-2 border-black rounded-2xl bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 mt-4">
@@ -109,9 +111,9 @@ export default function ProductDetail() {
         <div className="flex-1 flex flex-col gap-4 justify-center">
           <h1 className="text-2xl font-bold text-gray-900">{product.titulo}</h1>
           <div className="flex items-center gap-4">
-            <span className="text-black-600 text-xl font-bold">${product.precio}</span>
+            <span className="text-black-600 text-xl font-bold">{CLP.format(product.precio)}</span>
             {product.precio_anterior && (
-              <span className="line-through text-gray-400">${product.precio_anterior}</span>
+              <span className="line-through text-gray-400">{CLP.format(product.precio_anterior)}</span>
             )}
             {product.descuento && (
               <span className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
