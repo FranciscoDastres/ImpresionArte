@@ -8,6 +8,8 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../components/NotFound/NotFound";
 import Checkout from "../pages/Checkout";
+import PrivateRoute from "./PrivateRoute";
+import AdminPanel from "../pages/AdminPanel";
 
 // Componentes vacíos para las páginas que faltan
 const Cart = () => <div className="text-center p-8 text-2xl">Carrito de compras (en construcción)</div>;
@@ -23,6 +25,19 @@ const AppRoutes = () => (
     <Route path="/sucess" element={<Layout><Sucess /></Layout>} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
+
+    {/* Ruta protegida para admin */}
+    <Route
+      path="/admin"
+      element={
+        <PrivateRoute requiredRole="admin">
+          <Layout>
+            <AdminPanel />
+          </Layout>
+        </PrivateRoute>
+      }
+    />
+
     <Route path="*" element={<Layout><NotFound /></Layout>} />
   </Routes>
 );

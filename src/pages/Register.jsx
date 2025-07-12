@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const regionesEjemplo = [
   { id_region: 1, nombre: "Región de Arica y Parinacota" },
@@ -132,7 +133,7 @@ export default function Register() {
   };
 
   // Validación simple
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {};
     if (!formData.nombre) newErrors.nombre = "El nombre es obligatorio";
@@ -150,11 +151,20 @@ export default function Register() {
     if (!formData.confirm_password) newErrors.confirm_password = "Confirma tu contraseña";
     if (formData.password && formData.confirm_password && formData.password !== formData.confirm_password) newErrors.confirm_password = "Las contraseñas no coinciden";
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      setMessage("¡Registro simulado exitoso!");
-      // Aquí podrías redirigir o limpiar el formulario
-    } else {
+    if (Object.keys(newErrors).length > 0) {
       setMessage("");
+      return;
+    }
+    try {
+      await axios.post("/api/auth/register", {
+        nombre: formData.nombre,
+        email: formData.email,
+        password: formData.password
+      });
+      setMessage("¡Registro exitoso! Ahora puedes iniciar sesión.");
+      setTimeout(() => navigate('/login'), 1500);
+    } catch (err) {
+      setMessage("Error al registrar usuario");
     }
   };
 

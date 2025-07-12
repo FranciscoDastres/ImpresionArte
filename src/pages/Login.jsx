@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -8,17 +9,30 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  // Simulación de validación simple
-  const handleSubmit = (e) => {
+  // Login real
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {};
     if (!formData.email) newErrors.email = "El correo es obligatorio";
     if (!formData.password) newErrors.password = "La contraseña es obligatoria";
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      setMessage("¡Inicio de sesión simulado!");
-    } else {
+    if (Object.keys(newErrors).length > 0) {
       setMessage("");
+      return;
+    }
+    try {
+      const response = await axios.post("/api/auth/login", formData);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      setMessage("");
+      // Redirigir según el rol
+      if (response.data.user.rol === "admin") {
+        navigate("/admin"); // Crea esta ruta para el panel admin
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      setMessage("Credenciales inválidas o error de servidor");
     }
   };
 

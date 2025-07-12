@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
 
   const slides = [
     {
@@ -11,6 +13,7 @@ function HeroSection() {
       subtitle: "Diseños únicos y coloridos para tu bebida favorita",
       buttonText: "Ver Colección",
       image: "/images/products/vasos3d/colour-glass1.jpg",
+      categoria: "vasos3d",
     },
     {
       id: 2,
@@ -18,6 +21,7 @@ function HeroSection() {
       subtitle: "Placas decorativas para tu hogar con estilo único",
       buttonText: "Ver Colección",
       image: "/images/products/navi/placa-navi.jpg",
+      categoria: "navi",
     },
     {
       id: 3,
@@ -25,6 +29,7 @@ function HeroSection() {
       subtitle: "Personajes únicos para tu colección",
       buttonText: "Ver Colección",
       image: "/images/products/futurama/bender-chulo.jpg",
+      categoria: "figuras",
     },
   ];
 
@@ -70,7 +75,9 @@ function HeroSection() {
           <p className="text-xl md:text-2xl text-black mb-8 max-w-xl drop-shadow-md">
             {slide.subtitle}
           </p>
-          <button className="bg-white text-gray-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition-all text-lg">
+          <button className="bg-white text-gray-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition-all text-lg"
+            onClick={() => navigate(`/productos?categoria=${slide.categoria}`)}
+          >
             {slide.buttonText}
           </button>
         </div>
