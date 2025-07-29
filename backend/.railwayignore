@@ -1,0 +1,16 @@
+# Excluir archivos del frontend
+../src/
+../public/
+../index.html
+../vite.config.js
+../tailwind.config.js
+../postcss.config.cjs
+../package.json
+../package-lock.json
+
+# Excluir archivos de configuración del frontend
+../.env.local
+../env.local.example
+
+# Excluir Dockerfile del frontend
+../Dockerfile 
