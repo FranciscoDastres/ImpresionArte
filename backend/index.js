@@ -16,6 +16,36 @@ app.get("/", (req, res) => {
   res.json({ message: "Backend funcionando correctamente", timestamp: new Date().toISOString() });
 });
 
+// Test de conexión a la base de datos
+app.get("/test-db", async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json({ 
+      message: "Conexión a la base de datos exitosa", 
+      timestamp: result.rows[0].now,
+      dbConfig: {
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        hasPassword: !!process.env.DB_PASSWORD,
+        hasDatabaseUrl: !!process.env.DATABASE_URL
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      error: "Error de conexión a la base de datos", 
+      details: error.message,
+      dbConfig: {
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        hasPassword: !!process.env.DB_PASSWORD,
+        hasDatabaseUrl: !!process.env.DATABASE_URL
+      }
+    });
+  }
+});
+
 app.use('/api/auth', authRoutes);
 
 // Ruta: obtener todos los productos
