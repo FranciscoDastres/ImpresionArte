@@ -50,11 +50,11 @@ function RelatedProducts({ category = "vasos3d" }) {
         Te pueden interesar estos productos similares.
       </p>
       <div className="overflow-x-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[5px] pb-2 pl-2 pr-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 pb-2 pl-2 pr-10">
           {products.map((product) => (
             <div
               key={product.id}
-              className="flex flex-col bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden w-full max-w-xs mx-auto"
+              className="flex flex-col bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden w-full max-w-xs mx-auto "
             >
               <div className="relative w-full h-60 bg-gray-100 flex items-center justify-center">
                 <img
