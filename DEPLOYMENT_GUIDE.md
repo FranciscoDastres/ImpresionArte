@@ -151,3 +151,82 @@ Una vez configurado, tu frontend debería:
 - ¿Ya llegaste a la configuración de variables de entorno en Vercel?
 
 Una vez que me confirmes, te ayudo a configurar todo paso a paso. 
+
+## 🔍 El problema:
+
+Tu frontend está usando la URL local (`localhost:3001`) en lugar de la URL de Render.
+
+## 🔧 Solución:
+
+### Paso 1: Verificar la variable de entorno en Vercel
+
+1. **Ve a tu proyecto en Vercel**: [vercel.com/dashboard](https://vercel.com/dashboard)
+2. **Selecciona tu proyecto** `impresion-arte`
+3. **Ve a "Settings" → "Environment Variables"**
+4. **Verifica que tengas:**
+   ```
+   VITE_API_URL=https://tu-backend.onrender.com/api
+   ```
+
+### Paso 2: Obtener la URL correcta de tu backend
+
+**¿Cuál es la URL exacta de tu backend en Render?**
+- Ve a tu dashboard de Render
+- Busca la URL de tu servicio (algo como `https://backend-impresionarte.onrender.com`)
+
+### Paso 3: Actualizar la variable de entorno
+
+Una vez que tengas la URL correcta, actualiza la variable en Vercel:
+```
+VITE_API_URL=https://TU-URL-REAL-DE-RENDER.com/api
+```
+
+### Paso 4: Re-desplegar
+
+1. **Haz un commit y push** a tu repositorio
+2. **Vercel se desplegará automáticamente**
+
+## 🤔 ¿Qué necesito saber?
+
+**Dime:**
+1. ¿Cuál es la URL exacta de tu backend en Render?
+2. ¿Ya configuraste la variable `VITE_API_URL` en Vercel?
+
+Una vez que me confirmes estos detalles, podremos solucionarlo.
+
+**¿Puedes ir a tu dashboard de Render y copiarme la URL exacta de tu backend?** 
+
+## 🔧 Ahora vamos a conectar tu frontend
+
+### Paso 1: Configurar la variable de entorno en Vercel
+
+1. **Ve a tu proyecto en Vercel**: [vercel.com/dashboard](https://vercel.com/dashboard)
+2. **Selecciona tu proyecto** `impresion-arte`
+3. **Ve a "Settings" → "Environment Variables"**
+4. **Agrega esta variable:**
+
+```
+VITE_API_URL=https://backend-impresionarte.onrender.com/api
+```
+
+### Paso 2: Verificar que la API funciona
+
+Prueba estas URLs para verificar que todo funciona:
+- ✅ Backend: https://backend-impresionarte.onrender.com/ (ya funciona)
+- 🔍 API productos: https://backend-impresionarte.onrender.com/api/productos
+- 🔍 API categorías: https://backend-impresionarte.onrender.com/api/categorias
+
+### Paso 3: Re-desplegar el frontend
+
+Una vez que agregues la variable de entorno en Vercel:
+1. **Haz un commit y push** a tu repositorio
+2. **Vercel se desplegará automáticamente**
+
+## 🤔 ¿Ya agregaste la variable de entorno en Vercel?
+
+**La variable debe ser exactamente:**
+```
+VITE_API_URL=https://backend-impresionarte.onrender.com/api
+```
+
+Una vez que la agregues, tu frontend debería empezar a funcionar correctamente. ¿Ya llegaste a la configuración de variables de entorno en Vercel? 
