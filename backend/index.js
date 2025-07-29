@@ -10,6 +10,12 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// Health check para el despliegue
+app.get("/", (req, res) => {
+  res.json({ message: "Backend funcionando correctamente", timestamp: new Date().toISOString() });
+});
+
 app.use('/api/auth', authRoutes);
 
 // Ruta: obtener todos los productos

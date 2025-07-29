@@ -4,8 +4,10 @@
   "description": "Backend del e-commerce",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "dev": "nodemon index.js",
-    "migrate": "node migrate.js"
+    "migrate": "node migrate.js",
+    "migrate:prod": "node migrate.js"
   },
   "author": "",
   "license": "ISC",
