@@ -111,3 +111,43 @@ NODE_ENV=production
 - **Railway**: $5/mes de crédito gratuito (suficiente para proyectos pequeños)
 - **Vercel**: Gratis para proyectos personales
 - **Total**: $0/mes para proyectos pequeños 
+
+## 🔗 Conectar Frontend (Vercel) con Backend (Render)
+
+### Paso 1: Obtener la URL de tu backend en Render
+
+1. **Ve a tu dashboard de Render**
+2. **Busca la URL de tu servicio** (algo como `https://tu-backend.onrender.com`)
+3. **Copia esa URL**
+
+### Paso 2: Configurar la variable de entorno en Vercel
+
+1. **Ve a tu proyecto en Vercel**
+2. **Ve a "Settings" → "Environment Variables"**
+3. **Agrega esta variable:**
+
+```
+VITE_API_URL=https://tu-backend.onrender.com/api
+```
+
+**Nota**: Reemplaza `tu-backend.onrender.com` con la URL real de tu backend en Render.
+
+### Paso 3: Re-desplegar el frontend
+
+1. **Haz un commit y push** a tu repositorio
+2. **Vercel se desplegará automáticamente** con la nueva configuración
+
+##  Verificar la conexión
+
+Una vez configurado, tu frontend debería:
+- ✅ Cargar productos desde la base de datos
+- ✅ Mostrar las categorías
+- ✅ Funcionar la búsqueda
+
+## ¿Ya tienes la URL de tu backend en Render?
+
+**Dime:**
+- ¿Cuál es la URL de tu backend en Render?
+- ¿Ya llegaste a la configuración de variables de entorno en Vercel?
+
+Una vez que me confirmes, te ayudo a configurar todo paso a paso. 
