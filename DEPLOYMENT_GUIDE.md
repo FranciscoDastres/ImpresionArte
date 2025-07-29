@@ -154,79 +154,90 @@ Una vez que me confirmes, te ayudo a configurar todo paso a paso.
 
 ## 🔍 El problema:
 
-Tu frontend está usando la URL local (`localhost:3001`) en lugar de la URL de Render.
+Tu frontend está usando la URL local (`localhost:3001`) en lugar de la URL de Render. Esto indica que la variable `VITE_API_URL` no está configurada correctamente en Vercel.
 
-## 🔧 Solución:
+## 🔧 Solución con Render (no Railway):
 
 ### Paso 1: Verificar la variable de entorno en Vercel
 
 1. **Ve a tu proyecto en Vercel**: [vercel.com/dashboard](https://vercel.com/dashboard)
 2. **Selecciona tu proyecto** `impresion-arte`
 3. **Ve a "Settings" → "Environment Variables"**
-4. **Verifica que tengas:**
+4. **Verifica que tengas exactamente:**
    ```
-   VITE_API_URL=https://tu-backend.onrender.com/api
+   VITE_API_URL=https://backend-impresionarte.onrender.com/api
    ```
 
-### Paso 2: Obtener la URL correcta de tu backend
+### Paso 2: Si no está configurada, agrégala
 
-**¿Cuál es la URL exacta de tu backend en Render?**
-- Ve a tu dashboard de Render
-- Busca la URL de tu servicio (algo como `https://backend-impresionarte.onrender.com`)
+Si no ves la variable, agrégala:
+- **Name**: `VITE_API_URL`
+- **Value**: `https://backend-impresionarte.onrender.com/api`
+- **Environment**: `Production`
 
-### Paso 3: Actualizar la variable de entorno
+### Paso 3: Re-desplegar
 
-Una vez que tengas la URL correcta, actualiza la variable en Vercel:
-```
-VITE_API_URL=https://TU-URL-REAL-DE-RENDER.com/api
-```
-
-### Paso 4: Re-desplegar
-
+Una vez que agregues la variable:
 1. **Haz un commit y push** a tu repositorio
 2. **Vercel se desplegará automáticamente**
 
-## 🤔 ¿Qué necesito saber?
-
-**Dime:**
-1. ¿Cuál es la URL exacta de tu backend en Render?
-2. ¿Ya configuraste la variable `VITE_API_URL` en Vercel?
-
-Una vez que me confirmes estos detalles, podremos solucionarlo.
-
-**¿Puedes ir a tu dashboard de Render y copiarme la URL exacta de tu backend?** 
-
-## 🔧 Ahora vamos a conectar tu frontend
-
-### Paso 1: Configurar la variable de entorno en Vercel
-
-1. **Ve a tu proyecto en Vercel**: [vercel.com/dashboard](https://vercel.com/dashboard)
-2. **Selecciona tu proyecto** `impresion-arte`
-3. **Ve a "Settings" → "Environment Variables"**
-4. **Agrega esta variable:**
-
-```
-VITE_API_URL=https://backend-impresionarte.onrender.com/api
-```
-
-### Paso 2: Verificar que la API funciona
-
-Prueba estas URLs para verificar que todo funciona:
-- ✅ Backend: https://backend-impresionarte.onrender.com/ (ya funciona)
-- 🔍 API productos: https://backend-impresionarte.onrender.com/api/productos
-- 🔍 API categorías: https://backend-impresionarte.onrender.com/api/categorias
-
-### Paso 3: Re-desplegar el frontend
-
-Una vez que agregues la variable de entorno en Vercel:
-1. **Haz un commit y push** a tu repositorio
-2. **Vercel se desplegará automáticamente**
-
-## 🤔 ¿Ya agregaste la variable de entorno en Vercel?
+## 🤔 ¿Ya configuraste la variable de entorno en Vercel?
 
 **La variable debe ser exactamente:**
 ```
 VITE_API_URL=https://backend-impresionarte.onrender.com/api
 ```
 
-Una vez que la agregues, tu frontend debería empezar a funcionar correctamente. ¿Ya llegaste a la configuración de variables de entorno en Vercel? 
+¿Ya llegaste a la configuración de variables de entorno en Vercel? Si no sabes cómo llegar ahí, te guío paso a paso.
+
+**¿Ya agregaste la variable `VITE_API_URL` en Vercel?** 
+
+### Paso 2: Agregar base de datos PostgreSQL en Render
+
+1. **Ve a tu dashboard de Render**
+2. **Haz clic en "New +"**
+3. **Selecciona "PostgreSQL"**
+4. **Configura:**
+   - **Name**: `impresionarte-db`
+   - **Database**: `impresionarte`
+   - **User**: `impresionarte_user`
+
+### Paso 3: Conectar el backend con la base de datos
+
+Una vez creada la base de datos:
+1. **Ve a tu servicio backend en Render**
+2. **Ve a "Settings" → "Environment Variables"**
+3. **Agrega estas variables** (Render las proporcionará automáticamente):
+   ```
+   DATABASE_URL=postgresql://...
+   DB_HOST=...
+   DB_PORT=5432
+   DB_NAME=impresionarte
+   DB_USER=impresionarte_user
+   DB_PASSWORD=...
+   ```
+
+### Paso 4: Ejecutar la migración
+
+Una vez conectada la base de datos:
+1. **Ve a tu servicio backend en Render**
+2. **Ve a "Manual Deploy"**
+3. **Haz clic en "Deploy latest commit"**
+
+### Paso 5: Configurar el frontend
+
+Una vez que el backend funcione:
+1. **Ve a tu proyecto en Vercel**
+2. **Ve a "Settings" → "Environment Variables"**
+3. **Agrega:**
+   ```
+   VITE_API_URL=https://backend-impresionarte.onrender.com/api
+   ```
+
+## 🤔 ¿Ya creaste la base de datos PostgreSQL en Render?
+
+**Dime:**
+- ¿Ya agregaste el servicio PostgreSQL en Render?
+- ¿Ya conectaste el backend con la base de datos?
+
+Una vez que me confirmes, te ayudo con los siguientes pasos. 
