@@ -15,9 +15,10 @@ const config = process.env.DATABASE_URL
       database: process.env.DB_NAME,
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      ssl: {
+      // Solo usar SSL en producción, no en desarrollo local
+      ssl: process.env.NODE_ENV === 'production' ? {
         rejectUnauthorized: false
-      }
+      } : false
     };
 
 const pool = new Pool(config);

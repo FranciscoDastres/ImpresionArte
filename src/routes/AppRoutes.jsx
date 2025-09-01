@@ -10,6 +10,7 @@ import NotFound from "../components/NotFound/NotFound";
 import Checkout from "../pages/Checkout";
 import PrivateRoute from "./PrivateRoute";
 import AdminPanel from "../pages/AdminPanel";
+import ClientPanel from "../pages/ClientPanel";
 
 // Componentes vacíos para las páginas que faltan
 const Cart = () => <div className="text-center p-8 text-2xl">Carrito de compras (en construcción)</div>;
@@ -31,9 +32,17 @@ const AppRoutes = () => (
       path="/admin"
       element={
         <PrivateRoute requiredRole="admin">
-          <Layout>
-            <AdminPanel />
-          </Layout>
+          <AdminPanel />
+        </PrivateRoute>
+      }
+    />
+
+    {/* Ruta protegida para cliente */}
+    <Route
+      path="/client"
+      element={
+        <PrivateRoute requiredRole="cliente">
+          <ClientPanel />
         </PrivateRoute>
       }
     />

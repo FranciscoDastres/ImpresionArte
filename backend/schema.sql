@@ -1,3 +1,17 @@
+-- Crear tabla de usuarios con roles
+CREATE TABLE IF NOT EXISTS usuarios (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    rol VARCHAR(20) DEFAULT 'cliente' CHECK (rol IN ('admin', 'cliente')),
+    telefono VARCHAR(20),
+    direccion TEXT,
+    activo BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Crear tabla de categorías
 CREATE TABLE IF NOT EXISTS categorias (
     id SERIAL PRIMARY KEY,
@@ -18,13 +32,42 @@ CREATE TABLE IF NOT EXISTS productos (
     descripcion TEXT,
     descuento VARCHAR(10),
     imagen_principal VARCHAR(500) NOT NULL,
-    imagenes_adicionales TEXT[], -- Array de URLs de imágenes adicionales
+    imagenes_adicionales TEXT[],
     categoria_id INTEGER REFERENCES categorias(id),
     stock INTEGER DEFAULT 0,
     activo BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Crear tabla de pedidos
+CREATE TABLE IF NOT EXISTS pedidos (
+    id SERIAL PRIMARY KEY,
+    usuario_id INTEGER REFERENCES usuarios(id),
+    total DECIMAL(10,2) NOT NULL,
+    estado VARCHAR(20) DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'confirmado', 'en_proceso', 'enviado', 'entregado', 'cancelado')),
+    direccion_envio TEXT,
+    telefono_contacto VARCHAR(20),
+    notas TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Crear tabla de items del pedido
+CREATE TABLE IF NOT EXISTS pedido_items (
+    id SERIAL PRIMARY KEY,
+    pedido_id INTEGER REFERENCES pedidos(id) ON DELETE CASCADE,
+    producto_id INTEGER REFERENCES productos(id),
+    cantidad INTEGER NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL
+);
+
+-- Insertar usuarios de ejemplo
+INSERT INTO usuarios (nombre, email, password, rol) VALUES
+('Admin Principal', 'admin@impresionarte.com', '$2b$10$rQZ8K9mN2pL5vX7wY3hJ6t', 'admin'),
+('Cliente Ejemplo', 'cliente@ejemplo.com', '$2b$10$rQZ8K9mN2pL5vX7wY3hJ6t', 'cliente')
+ON CONFLICT (email) DO NOTHING;
 
 -- Insertar categorías iniciales
 INSERT INTO categorias (nombre, descripcion, icono, color_fondo, color_icono) VALUES
@@ -33,25 +76,9 @@ INSERT INTO categorias (nombre, descripcion, icono, color_fondo, color_icono) VA
 ('figuras', 'Figuras coleccionables 3D', '🎭', 'bg-[#cbd5e1]', 'text-gray-700')
 ON CONFLICT (nombre) DO NOTHING;
 
--- Insertar productos de ejemplo (vasos3d)
-INSERT INTO productos (titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, categoria_id) VALUES
-('Vaso 3D Verde', 25.00, 30.00, 'Vaso 3D personalizado en color verde, ideal para bebidas frías y calientes.', '17%', '/images/products/vasos3d/green-glass.jpg', (SELECT id FROM categorias WHERE nombre = 'vasos3d')),
-('Vaso 3D Amarillo', 22.00, 28.00, 'Vaso 3D personalizado en color amarillo, perfecto para bebidas refrescantes.', '21%', '/images/products/vasos3d/yellow-glass1.jpg', (SELECT id FROM categorias WHERE nombre = 'vasos3d')),
-('Vaso 3D Rojo', 24.00, 29.00, 'Vaso 3D personalizado en color rojo, ideal para bebidas energéticas.', '17%', '/images/products/vasos3d/colour-glass2.jpg', (SELECT id FROM categorias WHERE nombre = 'vasos3d')),
-('Vaso 3D Amarillo-Rojo', 26.00, 32.00, 'Vaso 3D personalizado con gradiente amarillo-rojo, diseño único.', '19%', '/images/products/vasos3d/yellow-red-glass.jpg', (SELECT id FROM categorias WHERE nombre = 'vasos3d'))
-ON CONFLICT DO NOTHING;
-
--- Insertar productos de ejemplo (navi)
-INSERT INTO productos (titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, categoria_id) VALUES
-('Placa Navi Honda', 45.00, 55.00, 'Placa decorativa Navi modelo Honda, perfecta para tu hogar.', '18%', '/images/products/navi/honda.jpg', (SELECT id FROM categorias WHERE nombre = 'navi')),
-('Placa Navi Decorativa', 38.00, 48.00, 'Placa Navi decorativa con diseño moderno y elegante.', '21%', '/images/products/navi/placa-navi2.jpg', (SELECT id FROM categorias WHERE nombre = 'navi')),
-('Placa Navi Estilo Clásico', 42.00, 52.00, 'Placa Navi con estilo clásico y acabados tradicionales.', '19%', '/images/products/navi/placa-navi3.jpg', (SELECT id FROM categorias WHERE nombre = 'navi')),
-('Placa Navi Moderna', 40.00, 50.00, 'Placa Navi con diseño moderno y líneas contemporáneas.', '20%', '/images/products/navi/placa-navi4.jpg', (SELECT id FROM categorias WHERE nombre = 'navi'))
-ON CONFLICT DO NOTHING;
-
--- Insertar productos de ejemplo (figuras)
-INSERT INTO productos (titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, categoria_id) VALUES
-('Bender Chulo', 35.00, 45.00, 'Figura coleccionable de Bender con estilo único y detallado.', '22%', '/images/products/futurama/bender-chulo.jpg', (SELECT id FROM categorias WHERE nombre = 'figuras')),
-('Robot Taladro 1', 28.00, 38.00, 'Robot taladro coleccionable con diseño mecánico detallado.', '26%', '/images/products/robots/Unknow_1.jpg', (SELECT id FROM categorias WHERE nombre = 'figuras')),
-('Robot Taladro 2', 32.00, 42.00, 'Robot taladro coleccionable versión mejorada con más detalles.', '24%', '/images/products/robots/Unknow_2.jpg', (SELECT id FROM categorias WHERE nombre = 'figuras'))
+-- Insertar productos de ejemplo
+INSERT INTO productos (titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, categoria_id, stock) VALUES
+('Vaso 3D Verde', 25.00, 30.00, 'Vaso 3D personalizado en color verde', '17%', '/images/products/vasos3d/green-glass.jpg', (SELECT id FROM categorias WHERE nombre = 'vasos3d'), 50),
+('Placa Navi Honda', 45.00, 55.00, 'Placa decorativa Navi modelo Honda', '18%', '/images/products/navi/honda.jpg', (SELECT id FROM categorias WHERE nombre = 'navi'), 30),
+('Bender Chulo', 35.00, 45.00, 'Figura coleccionable de Bender', '22%', '/images/products/futurama/bender-chulo.jpg', (SELECT id FROM categorias WHERE nombre = 'figuras'), 25)
 ON CONFLICT DO NOTHING; 

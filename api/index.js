@@ -1,16 +1,20 @@
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db");
+const pool = require("../backend/db");
 require("dotenv").config();
-const authRoutes = require('./routes/auth');
-const adminRoutes = require('./routes/admin');
-const clientRoutes = require('./routes/client');
-const { requireAuth, requireAdmin } = require('./middleware/auth');
+const authRoutes = require('../backend/routes/auth');
+const adminRoutes = require('../backend/routes/admin');
+const clientRoutes = require('../backend/routes/client');
+const { requireAuth, requireAdmin } = require('../backend/middleware/auth');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+// Configuración de CORS para Vercel
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*',
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Health check para el despliegue
@@ -26,34 +30,23 @@ app.get("/test-db", async (req, res) => {
       message: "Conexión a la base de datos exitosa", 
       timestamp: result.rows[0].now,
       dbConfig: {
-        host: process.env.DB_HOST,
-        database: process.env.DB_NAME,
-        user: process.env.DB_USER,
-        hasPassword: !!process.env.DB_PASSWORD,
         hasDatabaseUrl: !!process.env.DATABASE_URL
       }
     });
   } catch (error) {
     res.status(500).json({ 
       error: "Error de conexión a la base de datos", 
-      details: error.message,
-      dbConfig: {
-        host: process.env.DB_HOST,
-        database: process.env.DB_NAME,
-        user: process.env.DB_USER,
-        hasPassword: !!process.env.DB_PASSWORD,
-        hasDatabaseUrl: !!process.env.DATABASE_URL
-      }
+      details: error.message
     });
   }
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/client', clientRoutes);
+app.use('/auth', authRoutes);
+app.use('/admin', adminRoutes);
+app.use('/client', clientRoutes);
 
 // Ruta: obtener todos los productos
-app.get("/api/productos", async (req, res) => {
+app.get("/productos", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT p.*, c.nombre as categoria_nombre 
@@ -70,7 +63,7 @@ app.get("/api/productos", async (req, res) => {
 });
 
 // Ruta: obtener producto por ID
-app.get("/api/productos/:id", async (req, res) => {
+app.get("/productos/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query(`
@@ -92,14 +85,14 @@ app.get("/api/productos/:id", async (req, res) => {
 });
 
 // Ruta: obtener productos por categoría
-app.get("/api/productos/categoria/:categoria", async (req, res) => {
+app.get("/productos/categoria/:categoria", async (req, res) => {
   try {
     const { categoria } = req.params;
     const result = await pool.query(`
       SELECT p.*, c.nombre as categoria_nombre 
       FROM productos p 
       LEFT JOIN categorias c ON p.categoria_id = c.id 
-      WHERE c.nombre = $1 AND p.activo = true 
+      WHERE c.nombre ILIKE $1 AND p.activo = true 
       ORDER BY p.created_at DESC
     `, [categoria]);
     res.json(result.rows);
@@ -110,9 +103,9 @@ app.get("/api/productos/categoria/:categoria", async (req, res) => {
 });
 
 // Ruta: obtener todas las categorías
-app.get("/api/categorias", async (req, res) => {
+app.get("/categorias", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM categorias ORDER BY nombre");
+    const result = await pool.query('SELECT * FROM categorias ORDER BY nombre');
     res.json(result.rows);
   } catch (err) {
     console.error(err);
@@ -121,7 +114,7 @@ app.get("/api/categorias", async (req, res) => {
 });
 
 // Ruta: obtener productos populares (con descuento)
-app.get("/api/productos/populares", async (req, res) => {
+app.get("/productos/populares", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT p.*, c.nombre as categoria_nombre 
@@ -139,7 +132,7 @@ app.get("/api/productos/populares", async (req, res) => {
 });
 
 // Ruta: buscar productos
-app.get("/api/productos/buscar", async (req, res) => {
+app.get("/productos/buscar", async (req, res) => {
   try {
     const { q } = req.query;
     if (!q) {
@@ -167,7 +160,7 @@ app.get("/api/productos/buscar", async (req, res) => {
 });
 
 // Ruta: crear producto (solo admin)
-app.post('/api/productos', requireAuth, requireAdmin, async (req, res) => {
+app.post('/productos', requireAuth, requireAdmin, async (req, res) => {
   try {
     const { titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, imagenes_adicionales, categoria_id, stock, activo } = req.body;
     const result = await pool.query(
@@ -183,7 +176,7 @@ app.post('/api/productos', requireAuth, requireAdmin, async (req, res) => {
 });
 
 // Ruta: editar producto (solo admin)
-app.put('/api/productos/:id', requireAuth, requireAdmin, async (req, res) => {
+app.put('/productos/:id', requireAuth, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, imagenes_adicionales, categoria_id, stock, activo } = req.body;
@@ -200,7 +193,7 @@ app.put('/api/productos/:id', requireAuth, requireAdmin, async (req, res) => {
 });
 
 // Ruta: eliminar producto (solo admin)
-app.delete('/api/productos/:id', requireAuth, requireAdmin, async (req, res) => {
+app.delete('/productos/:id', requireAuth, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query('DELETE FROM productos WHERE id = $1 RETURNING *', [id]);
@@ -212,6 +205,5 @@ app.delete('/api/productos/:id', requireAuth, requireAdmin, async (req, res) => 
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
-});
+// Exportar para Vercel
+module.exports = app;

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, ShoppingCart, Heart, ChevronDown } from "lucide-react";
+import { Menu, X, ShoppingCart, Heart, ChevronDown, User, Settings, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import ApiService from "../../services/api";
 import { useCart } from "../../contexts/CartContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -14,7 +15,9 @@ function Header() {
   const [error, setError] = useState(null);
   const { cart, cartCount, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart();
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, logout, isAdmin, isClient } = useAuth();
   const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
 
   useEffect(() => {
@@ -51,6 +54,20 @@ function Header() {
     };
     fetchCategories();
   }, []);
+
+  // Cerrar menú de usuario al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuOpen && !event.target.closest('.user-menu')) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [userMenuOpen]);
 
   return (
     <div className="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200">
@@ -93,9 +110,63 @@ function Header() {
 
             {/* Right Side */}
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/login" className="text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</Link>
-              <span className="text-gray-400">|</span>
-              <Link to="/register" className="text-gray-700 hover:text-blue-600 transition-colors">Registro</Link>
+              {user ? (
+                <>
+                  {/* User Menu */}
+                  <div className="relative user-menu">
+                    <button
+                      onClick={() => setUserMenuOpen(!userMenuOpen)}
+                      className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors"
+                    >
+                      <User className="w-5 h-5" />
+                      <span>{user.nombre}</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    
+                    {userMenuOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                        {isAdmin() && (
+                          <Link
+                            to="/admin"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <Settings className="w-4 h-4" />
+                            <span>Panel Admin</span>
+                          </Link>
+                        )}
+                        {isClient() && (
+                          <Link
+                            to="/client"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <User className="w-4 h-4" />
+                            <span>Mi Panel</span>
+                          </Link>
+                        )}
+                        <button
+                          onClick={() => {
+                            logout();
+                            setUserMenuOpen(false);
+                            navigate("/");
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          <span>Cerrar Sesión</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</Link>
+                  <span className="text-gray-400">|</span>
+                  <Link to="/register" className="text-gray-700 hover:text-blue-600 transition-colors">Registro</Link>
+                </>
+              )}
               <button className="p-2 hover:text-blue-600 transition-colors relative" onClick={() => setCartSidebarOpen(true)}>
                 <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (
