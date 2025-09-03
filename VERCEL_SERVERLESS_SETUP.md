@@ -3,7 +3,7 @@
 ## ✅ **Estado Actual:**
 - ✅ Frontend optimizado (CSS reducido de 4MB a 11KB)
 - ✅ Funciones serverless creadas para cada endpoint
-- ✅ Configuración de Vercel actualizada
+- ✅ Configuración de Vercel corregida (sin conflictos)
 - ✅ Migración de base de datos simplificada
 
 ## 🔧 **Configuración en Vercel Dashboard:**
@@ -64,13 +64,14 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ### **1. Commit y Push:**
 ```bash
 git add .
-git commit -m "Add: Backend serverless functions for Vercel"
+git commit -m "Fix: Vercel configuration - remove builds property conflict"
 git push
 ```
 
 ### **2. En Vercel:**
 - El deploy se hará automáticamente
-- Verifica que todas las funciones se creen correctamente
+- Vercel detectará que es un proyecto React + Vite
+- Las funciones serverless se crearán automáticamente
 
 ### **3. Verificar Funcionamiento:**
 - Test de base de datos: `https://tu-proyecto.vercel.app/api/test-db`
@@ -93,6 +94,10 @@ git push
 ### **Error de JWT:**
 - Verifica que `JWT_SECRET` esté configurada
 - Debe tener al menos 32 caracteres
+
+### **Error de Build en Vercel:**
+- Vercel detectará automáticamente que es un proyecto Vite
+- Usará `npm run build` y `dist` como directorio de salida
 
 ## 📊 **Credenciales de Demo:**
 
@@ -121,6 +126,26 @@ git push
 - ✅ **Integrado** - Mismo dominio que el frontend
 - ✅ **Rápido** - Sin cold starts para APIs simples
 - ✅ **Seguro** - Variables de entorno protegidas
+- ✅ **Sin conflictos** - Configuración limpia de Vercel
+
+## 🔧 **Configuración Técnica:**
+
+### **vercel.json:**
+```json
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": { ... },
+  "routes": [ ... ]
+}
+```
+
+### **Auto-detección de Vercel:**
+- Vercel detectará automáticamente que es un proyecto React + Vite
+- Usará `npm run build` para construir el frontend
+- Servirá archivos estáticos desde `dist/`
+- Ejecutará funciones serverless desde `api/`
 
 ---
 
