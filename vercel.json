@@ -9,7 +9,65 @@
       }
     }
   ],
+  "functions": {
+    "api/productos.js": {
+      "maxDuration": 30
+    },
+    "api/categorias.js": {
+      "maxDuration": 30
+    },
+    "api/productos-populares.js": {
+      "maxDuration": 30
+    },
+    "api/buscar-productos.js": {
+      "maxDuration": 30
+    },
+    "api/productos-categoria.js": {
+      "maxDuration": 30
+    },
+    "api/producto.js": {
+      "maxDuration": 30
+    },
+    "api/auth.js": {
+      "maxDuration": 30
+    },
+    "api/test-db.js": {
+      "maxDuration": 30
+    }
+  },
   "routes": [
+    {
+      "src": "/api/productos",
+      "dest": "/api/productos.js"
+    },
+    {
+      "src": "/api/categorias",
+      "dest": "/api/categorias.js"
+    },
+    {
+      "src": "/api/productos/populares",
+      "dest": "/api/productos-populares.js"
+    },
+    {
+      "src": "/api/productos/buscar",
+      "dest": "/api/buscar-productos.js"
+    },
+    {
+      "src": "/api/productos/categoria",
+      "dest": "/api/productos-categoria.js"
+    },
+    {
+      "src": "/api/producto",
+      "dest": "/api/producto.js"
+    },
+    {
+      "src": "/api/auth",
+      "dest": "/api/auth.js"
+    },
+    {
+      "src": "/api/test-db",
+      "dest": "/api/test-db.js"
+    },
     {
       "src": "/src/(.*)",
       "dest": "/src/$1"
