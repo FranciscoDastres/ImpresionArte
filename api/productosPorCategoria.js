@@ -1,11 +1,12 @@
 const { Pool } = require("pg");
+const url = require("url");
 
 // 🔑 Pool global, se crea una sola vez
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = async (req, res) => {
@@ -23,7 +24,9 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { categoria } = req.query;
+    // 👇 Extraer parámetros de la URL
+    const queryObject = url.parse(req.url, true).query;
+    const categoria = queryObject.categoria;
 
     if (!categoria) {
       return res.status(400).json({ error: "Categoría requerida" });
@@ -42,7 +45,7 @@ module.exports = async (req, res) => {
 
     return res.status(200).json(result.rows);
   } catch (err) {
-    console.error("Error en /api/productosCategoria:", err);
+    console.error("Error en /api/productosPorCategoria:", err);
     return res.status(500).json({ error: "Error al obtener productos por categoría" });
   }
 };
