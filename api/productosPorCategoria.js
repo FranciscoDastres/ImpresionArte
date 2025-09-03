@@ -4,9 +4,7 @@ const url = require("url");
 // 🔑 Pool global, se crea una sola vez
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: { rejectUnauthorized: false },
 });
 
 module.exports = async (req, res) => {
@@ -37,7 +35,8 @@ module.exports = async (req, res) => {
       SELECT p.*, c.nombre AS categoria_nombre 
       FROM productos p 
       LEFT JOIN categorias c ON p.categoria_id = c.id 
-      WHERE c.nombre ILIKE $1 AND p.activo = true 
+      WHERE (c.nombre ILIKE $1 OR CAST(c.id AS TEXT) = $1) 
+        AND p.activo = true 
       ORDER BY p.created_at DESC
       `,
       [categoria]

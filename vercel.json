@@ -3,26 +3,18 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
-    "api/productos.js": { "maxDuration": 30 },
-    "api/categorias.js": { "maxDuration": 30 },
-    "api/productosPopulares.js": { "maxDuration": 30 },
-    "api/buscarProductos.js": { "maxDuration": 30 },
-    "api/productosPorCategoria.js": { "maxDuration": 30 },
-    "api/producto.js": { "maxDuration": 30 },
-    "api/auth.js": { "maxDuration": 30 },
-    "api/testDb.js": { "maxDuration": 30 }
+    "api/*.js": {
+      "maxDuration": 30
+    }
   },
   "routes": [
-    { "src": "/api/productos", "dest": "/api/productos.js" },
-    { "src": "/api/categorias", "dest": "/api/categorias.js" },
-    { "src": "/api/productosPopulares", "dest": "/api/productosPopulares.js" },
-    { "src": "/api/buscarProductos", "dest": "/api/buscarProductos.js" },
-    { "src": "/api/productosPorCategoria", "dest": "/api/productosPorCategoria.js" },
-    { "src": "/api/producto", "dest": "/api/producto.js" },
-    { "src": "/api/auth", "dest": "/api/auth.js" },
-    { "src": "/api/testDb", "dest": "/api/testDb.js" },
-    { "src": "/src/(.*)", "dest": "/src/$1" },
-    { "src": "/assets/(.*)", "dest": "/assets/$1" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
