@@ -1,4 +1,4 @@
-const pool = require("../backend/db");
+const { Pool } = require("pg");
 
 module.exports = async (req, res) => {
   // Configurar CORS
@@ -17,8 +17,18 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Crear conexión directamente aquí
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
+    });
+
     const { categoria } = req.query;
     if (!categoria) {
+      // Cerrar la conexión
+      await pool.end();
       return res.status(400).json({ error: 'Categoría requerida' });
     }
 
@@ -29,6 +39,9 @@ module.exports = async (req, res) => {
       WHERE c.nombre ILIKE $1 AND p.activo = true 
       ORDER BY p.created_at DESC
     `, [categoria]);
+    
+    // Cerrar la conexión
+    await pool.end();
     
     res.json(result.rows);
   } catch (err) {

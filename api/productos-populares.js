@@ -1,4 +1,4 @@
-const pool = require("../backend/db");
+const { Pool } = require("pg");
 
 module.exports = async (req, res) => {
   // Configurar CORS
@@ -17,6 +17,14 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Crear conexión directamente aquí
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
+    });
+
     // Obtener productos populares (con descuento)
     const result = await pool.query(`
       SELECT p.*, c.nombre as categoria_nombre 
@@ -26,6 +34,10 @@ module.exports = async (req, res) => {
       ORDER BY p.created_at DESC 
       LIMIT 12
     `);
+    
+    // Cerrar la conexión
+    await pool.end();
+    
     res.json(result.rows);
   } catch (err) {
     console.error(err);

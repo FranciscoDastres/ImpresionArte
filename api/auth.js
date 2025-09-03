@@ -1,4 +1,4 @@
-const pool = require("../backend/db");
+const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -19,6 +19,14 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Crear conexión directamente aquí
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
+    });
+
     const { email, password, action } = req.body;
 
     if (action === 'login') {
@@ -26,6 +34,8 @@ module.exports = async (req, res) => {
       const result = await pool.query('SELECT * FROM usuarios WHERE email = $1', [email]);
       
       if (result.rows.length === 0) {
+        // Cerrar la conexión
+        await pool.end();
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }
 
@@ -33,6 +43,8 @@ module.exports = async (req, res) => {
       const validPassword = await bcrypt.compare(password, user.password);
       
       if (!validPassword) {
+        // Cerrar la conexión
+        await pool.end();
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }
 
@@ -41,6 +53,9 @@ module.exports = async (req, res) => {
         process.env.JWT_SECRET || 'demo-secret',
         { expiresIn: '24h' }
       );
+
+      // Cerrar la conexión
+      await pool.end();
 
       res.json({
         token,
@@ -60,11 +75,16 @@ module.exports = async (req, res) => {
         ['Usuario Demo', email, hashedPassword, 'cliente']
       );
 
+      // Cerrar la conexión
+      await pool.end();
+
       res.status(201).json({
         message: 'Usuario creado exitosamente',
         user: result.rows[0]
       });
     } else {
+      // Cerrar la conexión
+      await pool.end();
       res.status(400).json({ error: 'Acción no válida' });
     }
   } catch (err) {

@@ -1,4 +1,4 @@
-const pool = require("../backend/db");
+const { Pool } = require("pg");
 
 module.exports = async (req, res) => {
   // Configurar CORS
@@ -12,6 +12,14 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Crear conexión directamente aquí
+    const pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
+    });
+
     if (req.method === 'GET') {
       // Obtener todos los productos
       const result = await pool.query(`
@@ -21,6 +29,10 @@ module.exports = async (req, res) => {
         WHERE p.activo = true 
         ORDER BY p.created_at DESC
       `);
+      
+      // Cerrar la conexión
+      await pool.end();
+      
       res.json(result.rows);
     } else if (req.method === 'POST') {
       // Crear producto (solo admin)
@@ -28,10 +40,16 @@ module.exports = async (req, res) => {
       const result = await pool.query(
         `INSERT INTO productos (titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, imagenes_adicionales, categoria_id, stock, activo, usuario_id)
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
-        [titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, imagenes_adicionales, categoria_id, stock, activo, 1] // usuario_id hardcodeado por ahora
+        [titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, imagenes_adicionales, categoria_id, stock, activo, 1]
       );
+      
+      // Cerrar la conexión
+      await pool.end();
+      
       res.status(201).json(result.rows[0]);
     } else {
+      // Cerrar la conexión
+      await pool.end();
       res.status(405).json({ error: 'Método no permitido' });
     }
   } catch (err) {
