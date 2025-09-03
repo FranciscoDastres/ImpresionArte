@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
     await pool.end();
     
     res.json({ 
-      message: "Conexión a la base de datos exitosa", 
+      message: "Conexión a la base de datos exitosa asd", 
       timestamp: result.rows[0].now,
       dbConfig: {
         hasDatabaseUrl: !!process.env.DATABASE_URL,
