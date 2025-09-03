@@ -1,13 +1,17 @@
 const { Pool } = require("pg");
 
-// 👇 Se crea el pool una sola vez y se reutiliza en todas las llamadas
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // ej: postgres://user:pass@host:5432/db?sslmode=require
-  ssl: true
+  user: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  port: process.env.PGPORT,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 module.exports = async (req, res) => {
-  // Configurar CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
