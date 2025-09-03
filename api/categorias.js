@@ -1,11 +1,9 @@
 const { Pool } = require("pg");
 
-// 👇 El pool se crea UNA sola vez y se reutiliza
+// 👇 Se crea el pool una sola vez y se reutiliza en todas las llamadas
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  connectionString: process.env.DATABASE_URL, // ej: postgres://user:pass@host:5432/db?sslmode=require
+  ssl: true
 });
 
 module.exports = async (req, res) => {
@@ -26,7 +24,7 @@ module.exports = async (req, res) => {
 
   try {
     const result = await pool.query("SELECT * FROM categorias ORDER BY nombre");
-    res.json(result.rows);
+    res.status(200).json(result.rows);
   } catch (err) {
     console.error("Error en /api/categorias:", err);
     res.status(500).json({ error: "Error al obtener categorías" });
