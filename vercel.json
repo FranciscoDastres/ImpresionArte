@@ -3,10 +3,19 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "functions": {
-    "api/*.js": { "maxDuration": 30 }
+    "api/*.js": {
+      "maxDuration": 30,
+      "runtime": "nodejs18.x"
+    }
   },
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
