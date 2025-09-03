@@ -1,20 +1,20 @@
-# Etapa 1: construcción de la app
-FROM node:18 AS build
+# Usar Node.js 18 como imagen base
+FROM node:18-alpine
 
+# Establecer directorio de trabajo
 WORKDIR /app
 
+# Copiar archivos de dependencias
 COPY package*.json ./
-RUN npm install
 
+# Instalar dependencias
+RUN npm ci --only=production
+
+# Copiar código fuente
 COPY . .
-RUN npm run build
 
-# Etapa 2: servir el contenido
-FROM nginx:alpine
+# Exponer puerto
+EXPOSE 3001
 
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Comando para ejecutar la aplicación
+CMD ["npm", "start"] 
