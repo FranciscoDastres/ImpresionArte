@@ -1,20 +1,18 @@
-# Usar Node.js 18 como imagen base
-FROM node:18-alpine
+# Usa la imagen base ligera, segura y actual
+FROM node:22-alpine
 
-# Establecer directorio de trabajo
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de dependencias
+# Copia los manifests y instala dependencias
 COPY package*.json ./
+RUN npm install --production
 
-# Instalar dependencias
-RUN npm ci --only=production
-
-# Copiar código fuente
+# Copia el resto del código
 COPY . .
 
-# Exponer puerto
-EXPOSE 3001
+# Expon el puerto de tu app
+EXPOSE 3000
 
-# Comando para ejecutar la aplicación
-CMD ["npm", "start"] 
+# Comando principal
+CMD ["npm", "start"]
