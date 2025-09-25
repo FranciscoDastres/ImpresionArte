@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ApiService from "../../services/api";
-import { useCart } from "../../contexts/CartContext";
+import useCart from "../../hooks/useCart";
 
 function RelatedProducts({ category = "vasos3d" }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, isStockExceeded } = useCart();
   const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
 
   useEffect(() => {
@@ -54,13 +54,15 @@ function RelatedProducts({ category = "vasos3d" }) {
           {products.map((product) => (
             <div
               key={product.id}
-              className="flex flex-col bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden w-full max-w-xs mx-auto "
+              className="flex flex-col bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden w-full max-w-xs mx-auto"
             >
               <div className="relative w-full h-60 bg-gray-100 flex items-center justify-center">
                 <img
                   src={product.imagen_principal}
-                  alt={product.titulo}
+                  alt={`Imagen de ${product.titulo}`}
                   className="object-contain w-full h-full"
+                  onError={e => { e.target.src = '/images/placeholder.png'; }}
+                  loading="lazy"
                 />
                 {product.descuento && (
                   <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
@@ -81,12 +83,22 @@ function RelatedProducts({ category = "vasos3d" }) {
                   )}
                 </div>
                 <div className="flex gap-2 mt-auto">
-                  <button className="flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2"
+                  <button
+                    className={`flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2
+                      ${isStockExceeded(product) ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
                     onClick={() => addToCart(product)}
+                    disabled={isStockExceeded(product)}
+                    aria-label={`Agregar ${product.titulo} al carrito`}
                   >
-                    🛒 Add to cart
+                    🛒 {isStockExceeded(product) ? "Sin stock" : "Add to cart"}
                   </button>
-                  <button className="bg-gray-100 text-gray-500 p-2 rounded-xl hover:bg-gray-200 transition" title="Más detalles" onClick={() => navigate(`/producto/${product.id}`)}>
+                  <button
+                    className="bg-gray-100 text-gray-500 p-2 rounded-xl hover:bg-gray-200 transition"
+                    title="Más detalles"
+                    onClick={() => navigate(`/producto/${product.id}`)}
+                    aria-label={`Ver detalles de ${product.titulo}`}
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.522 4.5 12 4.5c4.478 0 8.577 3.01 9.964 7.183.07.207.07.431 0 .639C20.577 16.49 16.478 19.5 12 19.5c-4.478 0-8.577-3.01-9.964-7.183z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
@@ -102,4 +114,4 @@ function RelatedProducts({ category = "vasos3d" }) {
   );
 }
 
-export default RelatedProducts; 
+export default RelatedProducts;

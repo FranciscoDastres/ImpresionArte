@@ -2,7 +2,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/api";
-import { useCart } from "../../contexts/CartContext";
+import useCart from "../../hooks/useCart";
 
 function PopularProducts() {
   const carouselRef = useRef();
@@ -12,7 +12,7 @@ function PopularProducts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, isStockExceeded } = useCart();
   const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
 
   // Cargar categorías
@@ -21,9 +21,7 @@ function PopularProducts() {
       try {
         const data = await ApiService.getCategorias();
         setCategories(data);
-        if (data.length > 0) {
-          setActiveCategory(data[0].nombre);
-        }
+        if (data.length > 0) setActiveCategory(data[0].nombre);
       } catch (err) {
         setError('Error al cargar categorías');
         console.error(err);
@@ -54,7 +52,10 @@ function PopularProducts() {
     const container = carouselRef.current;
     const scrollAmount = 300;
     if (!container) return;
-    container.scrollLeft += direction === "left" ? -scrollAmount : scrollAmount;
+    container.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth"
+    });
   };
 
   if (error) {
@@ -120,7 +121,6 @@ function PopularProducts() {
         <div
           ref={carouselRef}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 xl:gap-4 pb-2 pl-2 pr-10 xl:pr-20"
-
         >
           {products.map((product) => (
             <div
@@ -132,6 +132,8 @@ function PopularProducts() {
                   src={product.imagen_principal}
                   alt={product.titulo}
                   className="object-contain w-full h-full"
+                  onError={e => { e.target.src = '/images/placeholder.png'; }}
+                  loading="lazy"
                 />
                 {product.descuento && (
                   <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
@@ -152,10 +154,15 @@ function PopularProducts() {
                   )}
                 </div>
                 <div className="flex gap-2 mt-auto">
-                  <button className="flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2"
+                  <button
+                    className={`flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2
+                      ${isStockExceeded(product) ? "opacity-50 cursor-not-allowed" : ""}
+                    `}
                     onClick={() => addToCart(product)}
+                    disabled={isStockExceeded(product)}
+                    aria-label={`Agregar ${product.titulo} al carrito`}
                   >
-                    🛒 Add to cart
+                    🛒 {isStockExceeded(product) ? "Sin stock" : "Add to cart"}
                   </button>
                   <button className="bg-gray-100 text-gray-500 p-2 rounded-xl hover:bg-gray-200 transition" title="Más detalles" onClick={() => navigate(`/producto/${product.id}`)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
