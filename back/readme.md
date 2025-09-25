@@ -22,3 +22,22 @@ Este proyecto es el backend de Impresionarte, hecho con Node.js y Express.
 - Las dependencias de frontend (react, vite, tailwind, etc.) NO están en este backend.
 - Agrega nuevos scripts o dependencias aquí y explica para qué sirven si el proyecto crece.
 
+## 📚 Endpoints Disponibles
+
+| Endpoint                           | Método | Descripción                        | Protegido |
+|-------------------------------------|--------|------------------------------------|-----------|
+| /api/productos                     | GET    | Lista todos los productos          | ❌        |
+| /api/productos/:id                 | GET    | Obtener producto por ID            | ❌        |
+| /api/productos/categoria/:categoria| GET    | Productos por categoría            | ❌        |
+| /api/productos/populares           | GET    | Productos con descuento            | ❌        |
+| /api/productos/buscar?q=consulta   | GET    | Buscar productos                   | ❌        |
+| /api/productos                     | POST   | Crear producto                     | ✅ (admin)|
+| /api/productos/:id                 | PUT    | Editar producto                    | ✅ (admin)|
+| /api/productos/:id                 | DELETE | Eliminar producto                  | ✅ (admin)|
+| /api/categorias                    | GET    | Lista todas las categorías         | ❌        |
+
+---
+
+- **✅ (admin)**: Solo usuarios autenticados con rol admin
+- **❌**: Acceso público
+
