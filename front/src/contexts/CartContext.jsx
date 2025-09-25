@@ -1,11 +1,15 @@
+// src/contexts/CartContext.jsx
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 
-const CartContext = createContext();
+// Crea el contexto
+export const CartContext = createContext();
 
+// Hook para consumir el contexto desde cualquier componente
 export function useCart() {
   return useContext(CartContext);
 }
 
+// Provider para envolver tu app en main.jsx
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
@@ -34,7 +38,7 @@ export function CartProvider({ children }) {
             : item
         );
       } else {
-        // Si no está, agrega uno sólo (si hay stock)
+        // Si no está, agrega uno (si hay stock)
         if (stock > 0) return [...prev, { ...product, quantity: 1 }];
         return prev;
       }
@@ -65,7 +69,7 @@ export function CartProvider({ children }) {
   const cartCount = useMemo(() => cart.reduce((acc, item) => acc + item.quantity, 0), [cart]);
   const cartTotal = useMemo(() => cart.reduce((acc, item) => acc + item.quantity * parseFloat(item.precio), 0), [cart]);
 
-  // Get si el stock está superado para algún ítem (ideal para feedback visual)
+  // Saber si el stock fue superado (control visual)
   const isStockExceeded = (product) => {
     const found = cart.find((item) => item.id === product.id);
     return found && product.stock !== undefined && found.quantity >= product.stock;
@@ -81,7 +85,7 @@ export function CartProvider({ children }) {
         clearCart,
         cartCount,
         cartTotal,
-        isStockExceeded,   // Úsalo en tu botón de "agregar" para deshabilitar
+        isStockExceeded, // Ideal para deshabilitar botón “añadir”
       }}
     >
       {children}

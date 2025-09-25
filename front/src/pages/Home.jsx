@@ -1,15 +1,17 @@
-import HeroSection from "../components/HeroSection/HeroSection"
-import CategoryCards from "../components/CategoryCards/CategoryCards"
-import PopularProducts from "../components/PopularProducts/PopularProducts"
+import HeroSection from "../components/HeroSection/HeroSection";
+import CategoryCards from "../components/CategoryCards/CategoryCards";
+import PopularProducts from "../components/PopularProducts/PopularProducts";
+import SecondaryHeroSection from "../components/SecondaryHeroSection/SecondaryHeroSection";
 
 function Home() {
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen" role="main">
       <HeroSection />
       <CategoryCards />
       <PopularProducts />
-    </div>
+      <SecondaryHeroSection />
+    </main>
   );
 }
 
-export default Home
+export default Home;

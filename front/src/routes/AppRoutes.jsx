@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Layout from "../components/Layout/Layout";
 import Home from "../pages/Home";
 import ProductDetail from "../pages/ProductDetail";
@@ -11,10 +11,24 @@ import Checkout from "../pages/Checkout";
 import PrivateRoute from "./PrivateRoute";
 import AdminPanel from "../pages/AdminPanel";
 import ClientPanel from "../pages/ClientPanel";
+import Success from "../pages/Sucess";
 
-// Componentes vacíos para las páginas que faltan
+// Componente carrito temporal
 const Cart = () => <div className="text-center p-8 text-2xl">Carrito de compras (en construcción)</div>;
-const Sucess = () => <div className="text-center p-8 text-2xl">¡Compra exitosa! (en construcción)</div>;
+
+// Wrapper que obtiene los datos pasados por navigate (state)
+function SuccessRouteWrapper() {
+  const { state } = useLocation();
+  return (
+    <Layout>
+      <Success
+        message={state?.message || "¡Acción exitosa!"}
+        actionText={state?.actionText}
+        actionTo={state?.actionTo}
+      />
+    </Layout>
+  );
+}
 
 const AppRoutes = () => (
   <Routes>
@@ -23,9 +37,11 @@ const AppRoutes = () => (
     <Route path="/producto/:productId" element={<Layout><ProductDetail /></Layout>} />
     <Route path="/carrito" element={<Layout><Cart /></Layout>} />
     <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
-    <Route path="/sucess" element={<Layout><Sucess /></Layout>} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
+
+    {/* Página de éxito reutilizable */}
+    <Route path="/success" element={<SuccessRouteWrapper />} />
 
     {/* Ruta protegida para admin */}
     <Route

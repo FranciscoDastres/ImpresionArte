@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ApiService from "../services/api";
-import { useCart } from "../contexts/CartContext";
+import useCart from "../hooks/useCart";
 
 function ProductList() {
   const [searchParams] = useSearchParams();
@@ -15,10 +15,14 @@ function ProductList() {
   const [productsPerPage] = useState(12);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("newest");
-  const { addToCart } = useCart();
+  const { addToCart, isStockExceeded } = useCart();
 
   const categoriaParam = searchParams.get("categoria");
-  const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+  const CLP = new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+    maximumFractionDigits: 0
+  });
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -30,11 +34,9 @@ function ProductList() {
         setLoading(true);
         setError(null);
 
-        // Cargar categorías
         const categoriesData = await ApiService.getCategorias();
         setCategories(categoriesData);
 
-        // Cargar productos
         let productsData;
         if (categoriaParam) {
           productsData = await ApiService.getProductosPorCategoria(categoriaParam);
@@ -52,16 +54,14 @@ function ProductList() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [categoriaParam]);
 
   // Filtrar y ordenar productos
-  const filteredProducts = products
-    .filter(product => {
-      if (!selectedCategory || selectedCategory === 'todas') return true;
-      return (product.categoria_nombre || '').toLowerCase() === selectedCategory.toLowerCase();
-    })
+  const filteredProducts = products.filter(product => {
+    if (!selectedCategory || selectedCategory === 'todas') return true;
+    return (product.categoria_nombre || '').toLowerCase() === selectedCategory.toLowerCase();
+  })
     .sort((a, b) => {
       switch (sortBy) {
         case "price-low":
@@ -153,6 +153,7 @@ function ProductList() {
                 value={selectedCategory}
                 onChange={(e) => handleCategoryChange(e.target.value)}
                 className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[140px]"
+                aria-label="Filtrar por categoría"
               >
                 <option value="">Todas las categorías</option>
                 {categories.map((category) => (
@@ -168,6 +169,7 @@ function ProductList() {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent min-w-[140px]"
+                aria-label="Ordenar productos"
               >
                 <option value="newest">Más recientes</option>
                 <option value="price-low">Precio: menor a mayor</option>
@@ -204,6 +206,7 @@ function ProductList() {
                       src={product.imagen_principal}
                       alt={product.titulo}
                       className="object-contain w-full h-full"
+                      onError={e => { e.target.src = "/images/placeholder.png"; }}
                     />
                     {product.descuento && (
                       <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
@@ -225,34 +228,22 @@ function ProductList() {
                     </div>
                     <div className="flex gap-2 mt-auto">
                       <button
-                        className="flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2"
+                        className={`flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2 ${isStockExceeded(product) ? "opacity-50 cursor-not-allowed" : ""}`}
                         onClick={() => addToCart(product)}
+                        disabled={isStockExceeded(product)}
+                        aria-label={isStockExceeded(product) ? "Sin stock" : "Añadir al carrito"}
                       >
-                        🛒 Add to cart
+                        🛒 {isStockExceeded(product) ? "Sin stock" : "Add to cart"}
                       </button>
                       <button
                         className="bg-gray-100 text-gray-500 p-2 rounded-xl hover:bg-gray-200 transition"
                         title="Más detalles"
                         onClick={() => navigate(`/producto/${product.id}`)}
+                        aria-label={`Ver detalles de ${product.titulo}`}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.522 4.5 12 4.5c4.478 0 8.577 3.01 9.964 7.183.07.207.07.431 0 .639C20.577 16.49 16.478 19.5 12 19.5c-4.478 0-8.577-3.01-9.964-7.183z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"
-                          />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.522 4.5 12 4.5c4.478 0 8.577 3.01 9.964 7.183.07.207.07.431 0 .639C20.577 16.49 16.478 19.5 12 19.5c-4.478 0-8.577-3.01-9.964-7.183z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                         </svg>
                       </button>
                     </div>
@@ -268,27 +259,28 @@ function ProductList() {
                   onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                   className="p-2 rounded-full border border-gray-400 bg-white hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed text-base shadow"
+                  aria-label="Página anterior"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
-
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
                     className={`px-2 py-1 rounded border text-xs font-medium ${currentPage === page
-                        ? "bg-blue-600 text-white border-blue-600 shadow"
-                        : "border-gray-300 hover:bg-gray-50"
-                      }`}
+                      ? "bg-blue-600 text-white border-blue-600 shadow"
+                      : "border-gray-300 hover:bg-gray-50"
+                    }`}
+                    aria-label={`Ir a página ${page}`}
                   >
                     {page}
                   </button>
                 ))}
-
                 <button
                   onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                   className="p-2 rounded-full border border-gray-400 bg-white hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed text-base shadow"
+                  aria-label="Siguiente página"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
