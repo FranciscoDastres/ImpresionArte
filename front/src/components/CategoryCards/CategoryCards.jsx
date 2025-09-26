@@ -64,7 +64,7 @@ function CategoryCards() {
           <div
             key={cat.id}
             onClick={() => !cat.disabled && handleCategoryClick(cat.nombre)}
-            className={`bg-white shadow-xl border border-gray-100 flex flex-col items-center justify-center text-center cursor-pointer
+            className={`shadow-xl border border-gray-100 flex flex-col items-center justify-center text-center cursor-pointer
               ${cat.disabled ? "opacity-0 pointer-events-none" : "hover:shadow-2xl hover:scale-105 transition"}
               aspect-square min-w-[120px] max-w-[180px]`}
             style={{ height: "160px" }}

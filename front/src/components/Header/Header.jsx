@@ -29,24 +29,10 @@ function Header() {
         setCategories(data);
       } catch (err) {
         setError('Error al cargar categorías');
-        console.error(err);
-        // Usar categorías por defecto en caso de error
         setCategories([
-          {
-            id: 1,
-            nombre: "Vasos 3D",
-            descripcion: "Vasos personalizados en 3D",
-          },
-          {
-            id: 2,
-            nombre: "Placas Navi",
-            descripcion: "Placas decorativas Navi",
-          },
-          {
-            id: 3,
-            nombre: "Figuras",
-            descripcion: "Figuras coleccionables 3D",
-          },
+          { id: 1, nombre: "Vasos 3D", descripcion: "Vasos personalizados en 3D" },
+          { id: 2, nombre: "Placas Navi", descripcion: "Placas decorativas Navi" },
+          { id: 3, nombre: "Figuras", descripcion: "Figuras coleccionables 3D" }
         ]);
       } finally {
         setLoading(false);
@@ -55,51 +41,46 @@ function Header() {
     fetchCategories();
   }, []);
 
-  // Cerrar menú de usuario al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuOpen && !event.target.closest('.user-menu')) {
         setUserMenuOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [userMenuOpen]);
 
   return (
-    <div className="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200">
-      <header className="border-b border-gray-200">
-        <div className="px-4 sm:px-6 lg:px-10 mx-auto">
-          <div className="flex items-center justify-between py-4">
-            {/* Logo */}
-            <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200">
-              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+    <div className="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200 w-full">
+      <header className="border-b border-gray-200 w-full">
+        <div className="w-full max-w-none mx-auto px-4 lg:px-20 xl:px-32">
+          <div className="flex items-center justify-between py-2 sm:py-5">
+            {/* Logo (izquierda) */}
+            <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
+              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                 </svg>
               </div>
               <div>
-                <div className="font-bold text-lg text-gray-800">ImpresionArte</div>
-                <div className="text-xs text-gray-600">Impresiones 3D Personalizadas</div>
+                <div className="font-bold text-xl xl:text-2xl text-gray-800">ImpresionArte</div>
+                <div className="text-sm xl:text-base text-gray-600">Impresiones 3D Personalizadas</div>
               </div>
             </a>
 
-            {/* Search Bar */}
-            {/* Search Bar Grande y Centrado */}
-            <div className="flex-1 flex justify-center">
-              <div className="w-full max-w-xl">
+            {/* Search Bar (centro) */}
+            <div className="flex-1 flex justify-center px-4">
+              <div className="w-full max-w-2xl">
                 <div className="relative">
                   <input
                     type="text"
                     placeholder="Buscar productos..."
-                    className="w-full h-12 rounded-lg bg-gray-200 text-gray-800 placeholder:text-gray-500 px-5 pr-12 shadow focus:outline-none focus:ring-2 focus:ring-blue-400 text-base border border-gray-300"
+                    className="w-full h-11 rounded-lg bg-gray-200 text-gray-800 placeholder:text-gray-500 px-4 pr-12 shadow focus:outline-none focus:ring-2 focus:ring-blue-400 text-base border border-gray-300"
                     style={{ fontWeight: 500 }}
                   />
-                  <button className="absolute right-4 top-1/2 -translate-y-1/2">
-                    <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <button className="absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg className="w-7 h-7 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <circle cx="11" cy="11" r="8" />
                       <line x1="21" y1="21" x2="16.65" y2="16.65" />
                     </svg>
@@ -108,22 +89,19 @@ function Header() {
               </div>
             </div>
 
-
-            {/* Right Side */}
-            <div className="hidden md:flex items-center space-x-4">
+            {/* Enlaces/Espacio (derecha) */}
+            <div className="hidden md:flex items-center space-x-4 xl:space-x-8">
               {user ? (
                 <>
-                  {/* User Menu */}
                   <div className="relative user-menu">
                     <button
                       onClick={() => setUserMenuOpen(!userMenuOpen)}
                       className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors"
                     >
                       <User className="w-5 h-5" />
-                      <span>{user.nombre}</span>
+                      <span className="font-medium">{user.nombre}</span>
                       <ChevronDown className="w-4 h-4" />
                     </button>
-
                     {userMenuOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
                         {isAdmin() && (
@@ -163,15 +141,15 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</Link>
-                  <span className="text-gray-400">|</span>
-                  <Link to="/register" className="text-gray-700 hover:text-blue-600 transition-colors">Registro</Link>
+                  <Link to="/login" className="text-gray-700 hover:text-blue-600 font-medium">Iniciar Sesión</Link>
+                  <span className="text-gray-400 font-light">|</span>
+                  <Link to="/register" className="text-gray-700 hover:text-blue-600 font-medium">Registro</Link>
                 </>
               )}
               <button className="p-2 hover:text-blue-600 transition-colors relative" onClick={() => setCartSidebarOpen(true)}>
-                <ShoppingCart className="w-5 h-5" />
+                <ShoppingCart className="w-6 h-6" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                     {cartCount}
                   </span>
                 )}
@@ -179,9 +157,9 @@ function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            <div className="md:hidden ml-2">
+              <button className="p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
               </button>
             </div>
           </div>
@@ -190,13 +168,13 @@ function Header() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-3 border-b border-gray-200 bg-white">
-          <Link to="/login" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Iniciar Sesión</Link>
-          <Link to="/register" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Registro</Link>
-          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Favoritos</a>
-          <a href="#" className="block text-sm text-gray-700 hover:text-blue-600 transition-colors">Carrito</a>
+        <div className="md:hidden px-4 pb-4 space-y-3 border-b border-gray-200 bg-white w-full max-w-[540px] mx-auto">
+          <Link to="/login" className="block text-base text-gray-700 hover:text-blue-600 font-medium">Iniciar Sesión</Link>
+          <Link to="/register" className="block text-base text-gray-700 hover:text-blue-600 font-medium">Registro</Link>
+          <a href="#" className="block text-base text-gray-700 hover:text-blue-600 font-medium">Favoritos</a>
+          <a href="#" className="block text-base text-gray-700 hover:text-blue-600 font-medium">Carrito</a>
           <div className="pt-2 border-t border-gray-200">
-            <div className="text-sm font-medium text-gray-900 mb-2">Categorías</div>
+            <div className="text-base font-semibold text-gray-900 mb-2">Categorías</div>
             {loading ? (
               <div className="text-sm text-gray-500">Cargando categorías...</div>
             ) : error ? (
@@ -206,7 +184,7 @@ function Header() {
                 <Link
                   key={category.id}
                   to={`/productos?categoria=${encodeURIComponent(category.nombre)}`}
-                  className="block text-sm text-gray-700 hover:text-blue-600 transition-colors py-1"
+                  className="block text-base text-gray-700 hover:text-blue-600 transition-colors py-1 font-medium"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {category.nombre}
@@ -218,35 +196,31 @@ function Header() {
       )}
 
       {/* Navigation Desktop */}
-      <nav className="border-b border-gray-200 hidden md:block bg-white">
-        <div className="px-10 mx-auto">
-          <div className="flex items-center justify-between py-3">
-            <div className="flex items-center space-x-8">
+      <nav className="border-b border-gray-200 hidden md:block bg-white w-full overflow-x-auto scrollbar-hide">
+        <div className="px-4 lg:px-20 xl:px-32 mx-auto w-full max-w-none">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center space-x-6 xl:space-x-10">
               {/* Sidebar Categorías Desktop */}
               <div className="relative">
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="flex items-center space-x-2 transition-colors duration-200"
+                  className="flex items-center space-x-2 transition-colors duration-200 font-semibold"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
-                  <span className="font-medium">COMPRAR POR CATEGORÍA</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${sidebarOpen ? "rotate-180" : ""}`} />
+                  <span>COMPRAR POR CATEGORÍA</span>
+                  <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${sidebarOpen ? "rotate-180" : ""}`} />
                 </button>
-
-                {/* Sidebar y Overlay */}
                 <>
                   {/* Overlay */}
                   <div
-                    className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${sidebarOpen ? "block" : "hidden"
-                      }`}
+                    className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${sidebarOpen ? "block" : "hidden"}`}
                     onClick={() => setSidebarOpen(false)}
                   />
                   {/* Sidebar con transición */}
                   <div
-                    className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-                      }`}
+                    className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
                   >
                     <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                       <div className="flex items-center space-x-2">
@@ -281,23 +255,21 @@ function Header() {
                   </div>
                 </>
               </div>
-
               {/* Enlaces directos a categorías */}
-              <div className="flex space-x-6">
+              <div className="flex space-x-4 xl:space-x-6 overflow-x-auto scrollbar-hide">
                 {categories.map((category) => (
                   <Link
                     key={category.id}
                     to={`/productos?categoria=${encodeURIComponent(category.nombre)}`}
-                    className="text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                    className="text-gray-700 hover:text-blue-600 transition-colors duration-200 whitespace-nowrap font-semibold"
                   >
                     {category.nombre}
                   </Link>
                 ))}
               </div>
             </div>
-
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center space-x-3 text-base text-gray-600">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -313,8 +285,7 @@ function Header() {
 
       {/* Sidebar Carrito */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${cartSidebarOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${cartSidebarOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
@@ -366,14 +337,14 @@ function Header() {
             <button className="w-full text-xs text-gray-500 underline" onClick={clearCart}>Vaciar carrito</button>
           </div>
         )}
+        {/* Overlay para cerrar el slide */}
+        {cartSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+            onClick={() => setCartSidebarOpen(false)}
+          />
+        )}
       </div>
-      {/* Overlay para cerrar el slide */}
-      {cartSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
-          onClick={() => setCartSidebarOpen(false)}
-        />
-      )}
     </div>
   );
 }

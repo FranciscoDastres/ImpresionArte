@@ -6,7 +6,7 @@ import SecondaryHeroSection from "../components/SecondaryHeroSection/SecondaryHe
 function Home() {
   return (
     <main className="min-h-screen bg-gray-50" role="main">
-      <section className="w-full flex flex-col items-center justify-center bg-gray-100 py-8">
+      <section className="w-full flex flex-col items-center justify-center bg-gray-200 py-4">
         <HeroSection />
         <CategoryCards />
       </section>
