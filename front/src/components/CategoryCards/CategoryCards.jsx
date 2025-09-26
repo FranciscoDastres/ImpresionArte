@@ -25,14 +25,12 @@ function CategoryCards() {
   };
 
   if (loading) return (
-    <section className="w-full px-4 py-2 flex justify-center items-center h-32">
-      {/* Puedes probar un loader animado de Tailwind o skeleton cards! */}
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+    <section className="w-full py-8 flex justify-center items-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
     </section>
   );
-
   if (error) return (
-    <section className="w-full px-4 py-2 text-center text-red-600">
+    <section className="w-full py-8 text-center text-red-600">
       <p>Error: {error}</p>
       <button
         onClick={() => window.location.reload()}
@@ -43,31 +41,40 @@ function CategoryCards() {
     </section>
   );
 
+  // Si tienes menos de 5 categorías, rellenamos para que se vea la fila completa
+  const filledCategories = [
+    ...categories,
+    ...Array.from({ length: Math.max(0, 5 - categories.length) }, (_, i) => ({
+      id: `empty${i}`,
+      nombre: "",
+      icono: "",
+      color_fondo: "bg-transparent",
+      color_icono: "",
+      disabled: true,
+    }))
+  ].slice(0, 5);
+
   return (
-    <section className="w-full px-4 py-2">
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center mx-auto"
-        style={{ maxWidth: '800px' }}
-      >
-        {categories.map((cat) => (
+    <section className="w-full py-8 bg-white">
+      <div className="max-w-7xl mx-auto flex justify-center gap-7 px-2 overflow-x-auto scrollbar-hide">
+        {filledCategories.map((cat) => (
           <div
             key={cat.id}
-            onClick={() => handleCategoryClick(cat.nombre)}
-            className="bg-white/90 backdrop-blur-sm aspect-square shadow-lg border border-gray-200 p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:scale-105 transition-all duration-300 rounded-xl min-w-[140px] md:min-w-0"
+            onClick={() => !cat.disabled && handleCategoryClick(cat.nombre)}
+            className={`bg-white shadow-xl border border-gray-100 flex flex-col items-center justify-center text-center cursor-pointer
+              ${cat.disabled ? "opacity-0 pointer-events-none" : "hover:shadow-2xl hover:scale-105 transition"}
+              aspect-square min-w-[140px] max-w-[180px] rounded-3xl`}
+            style={{ height: "180px" }}
           >
-            <div className={`${cat.color_fondo || 'bg-gray-100'} w-20 h-20 rounded-full flex items-center justify-center mb-4`}>
-              <span className={`text-3xl ${cat.color_icono || 'text-gray-600'}`}>
-                {cat.icono || '📦'}
-              </span>
+            <div className={`${cat.color_fondo || 'bg-blue-100'} w-16 h-16 rounded-2xl flex items-center justify-center mb-3`}>
+              <span className={`text-4xl ${cat.color_icono || 'text-blue-500'}`}>{cat.icono || '📦'}</span>
             </div>
-            <h3 className="text-sm font-medium text-gray-900">{cat.nombre}</h3>
-            {cat.descripcion && (
-              <p className="text-xs text-gray-600 mt-1 hidden sm:block">{cat.descripcion}</p>
-            )}
+            <h3 className="text-base font-bold text-gray-900">{cat.nombre}</h3>
           </div>
         ))}
       </div>
     </section>
   );
 }
+
 export default CategoryCards;
