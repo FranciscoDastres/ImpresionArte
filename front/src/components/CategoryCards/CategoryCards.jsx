@@ -46,8 +46,8 @@ function CategoryCards() {
   return (
     <section className="w-full px-4 py-2">
       <div
-        className="flex gap-3 overflow-x-auto no-scrollbar md:grid md:grid-cols-3 justify-center mx-auto"
-        style={{ maxWidth: '600px' }}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 justify-center mx-auto"
+        style={{ maxWidth: '800px' }}
       >
         {categories.map((cat) => (
           <div
