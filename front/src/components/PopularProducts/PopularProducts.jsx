@@ -15,20 +15,7 @@ function PopularProducts() {
   const { addToCart, isStockExceeded } = useCart();
   const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
 
-  // Cargar categorías
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await ApiService.getCategorias();
-        setCategories(data);
-        if (data.length > 0) setActiveCategory(data[0].nombre);
-      } catch (err) {
-        setError('Error al cargar categorías');
-        console.error(err);
-      }
-    };
-    fetchCategories();
-  }, []);
+
 
   // Cargar productos por categoría
   useEffect(() => {
@@ -83,21 +70,6 @@ function PopularProducts() {
         No te pierdas las ofertas actuales hasta fin de mes.
       </p>
 
-      {/* Categorías */}
-      <div className="flex gap-6 mb-6 overflow-x-auto">
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setActiveCategory(cat.nombre)}
-            className={`uppercase text-sm font-semibold ${activeCategory === cat.nombre
-                ? "text-black border-b-2 border-black"
-                : "text-gray-700 hover:text-black"
-              } pb-1 transition-colors`}
-          >
-            {cat.nombre}
-          </button>
-        ))}
-      </div>
 
       {/* Loading */}
       {loading && (
