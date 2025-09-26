@@ -13,7 +13,7 @@ function Layout({ children }) {
       {!isLogin && <TopBanner />}
       {!isLogin && <Header />}
       <main>{children}</main>
-      {!isLogin && <SecondaryHeroSection />}
+    
       {!isLogin && <Footer />}
     </>
   );

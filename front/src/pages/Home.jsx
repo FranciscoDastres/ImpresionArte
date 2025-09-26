@@ -5,12 +5,12 @@ import SecondaryHeroSection from "../components/SecondaryHeroSection/SecondaryHe
 
 function Home() {
   return (
-    <main className="min-h-screen" role="main">
+    <div className="min-h-screen" role="main">
       <HeroSection />
       <CategoryCards />
       <PopularProducts />
       <SecondaryHeroSection />
-    </main>
+    </div>
   );
 }
 
