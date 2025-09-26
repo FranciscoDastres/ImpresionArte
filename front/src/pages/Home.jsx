@@ -5,16 +5,20 @@ import SecondaryHeroSection from "../components/SecondaryHeroSection/SecondaryHe
 
 function Home() {
   return (
-    <main className="min-h-screen bg-white" role="main">
-      {/* Hero y Categorías integrados */}
-      <div className="w-full flex flex-col items-center justify-center pb-2">
+    <main className="min-h-screen bg-gray-50" role="main">
+      <section className="w-full flex flex-col items-center justify-center bg-gray-100 py-8">
         <HeroSection />
         <CategoryCards />
-      </div>
+      </section>
 
-      {/* Otros bloques */}
-      <PopularProducts />
-      <SecondaryHeroSection />
+
+      <section className="w-full mb-10">
+        <PopularProducts />
+      </section>
+
+      <section className="w-full mb-10">
+        <SecondaryHeroSection />
+      </section>
     </main>
   );
 }

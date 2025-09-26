@@ -15,7 +15,7 @@ function Layout({ children }) {
       {/* Header principal */}
       {!isLogin && <Header />}
       {/* Contenido principal */}
-      <main className="container mx-auto px-2 sm:px-4 py-6">{children}</main>
+      <main>{children}</main>
       {/* Footer */}
       {!isLogin && <Footer />}
     </div>
