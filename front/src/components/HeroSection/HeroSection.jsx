@@ -32,7 +32,8 @@ export default function HeroSection() {
                             <div className="w-full flex justify-center">
                                 <div className="w-full max-w-[1800px] px-2 md:px-12 xl:px-24">
                                     <div className="grid grid-cols-1 md:grid-cols-2 items-center rounded-2xl h-[260px] sm:h-[340px] md:h-[410px] xl:h-[520px] overflow-hidden bg-transparent">
-                                        {/* Texto */}
+
+                                        {/* Texto - igual */}
                                         <div className="flex flex-col items-start justify-center h-full px-2 md:px-14 xl:px-24">
                                             <h1 className="text-base sm:text-2xl md:text-4xl xl:text-5xl font-extrabold text-gray-900 mb-2 leading-tight">
                                                 {slide.title}
@@ -40,21 +41,32 @@ export default function HeroSection() {
                                             <p className="text-xs sm:text-base md:text-xl xl:text-2xl text-gray-700 mb-3 xl:mb-6">
                                                 {slide.subtitle}
                                             </p>
+
+                                            {/* DESKTOP botón debajo del texto, NO se ve en mobile */}
                                             <button
-                                                className="bg-blue-500 text-white font-semibold px-6 sm:px-7 xl:px-10 py-2 sm:py-3 xl:py-4 rounded-full hover:bg-blue-600 transition text-xs sm:text-base xl:text-lg"
+                                                className="hidden md:inline-block bg-blue-500 text-white font-semibold px-7 xl:px-10 py-3 xl:py-4 rounded-full hover:bg-blue-600 transition text-base xl:text-lg"
                                                 onClick={() => navigate(`/productos?categoria=${slide.categoria}`)}
                                             >
                                                 {slide.buttonText}
                                             </button>
                                         </div>
-                                        {/* Imagen */}
-                                        <div className="flex justify-end items-center h-full w-full ">
+
+                                        {/* Imagen + botón mobile */}
+                                        <div className="flex flex-col items-center justify-center h-full w-full">
                                             <img
                                                 src={slide.image}
                                                 alt={slide.title}
-                                                className="rounded-2xl w-full max-w-[280px] sm:max-w-[380px] md:max-w-[560px] xl:max-w-[720px] h-[120px] sm:h-[200px] md:h-[320px] xl:h-[440px] object-contain bg-transparent"
+                                                className="rounded-2xl w-full max-w-[320px] sm:max-w-[420px] md:max-w-[480px] xl:max-w-[680px] h-[160px] sm:h-[220px] md:h-[320px] xl:h-[440px] object-contain bg-transparent mx-auto"
                                             />
+                                            {/* SOLO MOBILE: Botón centrado bajo imagen */}
+                                            <button
+                                                className="mt-3 md:hidden bg-blue-500 text-white font-semibold px-4 py-1.5 rounded-full hover:bg-blue-600 transition text-xs w-[70%] max-w-[160px] mx-auto"
+                                                onClick={() => navigate(`/productos?categoria=${slide.categoria}`)}
+                                            >
+                                                {slide.buttonText}
+                                            </button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
