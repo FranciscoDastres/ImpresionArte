@@ -1,4 +1,4 @@
--- Crear tabla de usuarios con roles
+-- Tabla de usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Crear tabla de categorías
+-- Tabla de categorías
 CREATE TABLE IF NOT EXISTS categorias (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL UNIQUE,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS categorias (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Crear tabla de productos
+-- Tabla de productos
 CREATE TABLE IF NOT EXISTS productos (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
@@ -34,13 +34,13 @@ CREATE TABLE IF NOT EXISTS productos (
     imagen_principal VARCHAR(500) NOT NULL,
     imagenes_adicionales TEXT[],
     categoria_id INTEGER REFERENCES categorias(id),
-    stock INTEGER DEFAULT 0,
+    stock INTEGER DEFAULT 5,
     activo BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Crear tabla de pedidos
+-- Tabla de pedidos
 CREATE TABLE IF NOT EXISTS pedidos (
     id SERIAL PRIMARY KEY,
     usuario_id INTEGER REFERENCES usuarios(id),
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS pedidos (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Crear tabla de items del pedido
+-- Tabla de items del pedido
 CREATE TABLE IF NOT EXISTS pedido_items (
     id SERIAL PRIMARY KEY,
     pedido_id INTEGER REFERENCES pedidos(id) ON DELETE CASCADE,
@@ -63,22 +63,27 @@ CREATE TABLE IF NOT EXISTS pedido_items (
     subtotal DECIMAL(10,2) NOT NULL
 );
 
--- Insertar usuarios de ejemplo
+-- Usuarios de ejemplo
 INSERT INTO usuarios (nombre, email, password, rol) VALUES
 ('Admin Principal', 'admin@impresionarte.com', '$2b$10$rQZ8K9mN2pL5vX7wY3hJ6t', 'admin'),
 ('Cliente Ejemplo', 'cliente@ejemplo.com', '$2b$10$rQZ8K9mN2pL5vX7wY3hJ6t', 'cliente')
 ON CONFLICT (email) DO NOTHING;
 
--- Insertar categorías iniciales
+-- Categorías iniciales
 INSERT INTO categorias (nombre, descripcion, icono, color_fondo, color_icono) VALUES
 ('vasos3d', 'Vasos personalizados en 3D', '🥤', 'bg-[#e0f2fe]', 'text-blue-500'),
 ('navi', 'Placas decorativas Navi', '🏠', 'bg-[#f1f5f9]', 'text-sky-600'),
 ('figuras', 'Figuras coleccionables 3D', '🎭', 'bg-[#cbd5e1]', 'text-gray-700')
 ON CONFLICT (nombre) DO NOTHING;
 
--- Insertar productos de ejemplo
+-- Productos de ejemplo CON PRECIO CLP y stock 5+
 INSERT INTO productos (titulo, precio, precio_anterior, descripcion, descuento, imagen_principal, categoria_id, stock) VALUES
-('Vaso 3D Verde', 25.00, 30.00, 'Vaso 3D personalizado en color verde', '17%', '/images/products/vasos3d/green-glass.jpg', (SELECT id FROM categorias WHERE nombre = 'vasos3d'), 50),
-('Placa Navi Honda', 45.00, 55.00, 'Placa decorativa Navi modelo Honda', '18%', '/images/products/navi/honda.jpg', (SELECT id FROM categorias WHERE nombre = 'navi'), 30),
-('Bender Chulo', 35.00, 45.00, 'Figura coleccionable de Bender', '22%', '/images/products/futurama/bender-chulo.jpg', (SELECT id FROM categorias WHERE nombre = 'figuras'), 25)
-ON CONFLICT DO NOTHING; 
+('Vaso 3D Verde', 3990, 4990, 'Vaso 3D personalizado en color verde', '20%', '/images/products/vasos3d/green-glass.jpg', (SELECT id FROM categorias WHERE nombre = 'vasos3d'), 50),
+('Placa Navi Honda', 15990, 18990, 'Placa decorativa Navi modelo Honda', '16%', '/images/products/navi/honda.jpg', (SELECT id FROM categorias WHERE nombre = 'navi'), 30),
+('Bender Chulo', 12000, 14990, 'Figura coleccionable de Bender', '20%', '/images/products/futurama/bender-chulo.jpg', (SELECT id FROM categorias WHERE nombre = 'figuras'), 25)
+ON CONFLICT DO NOTHING;
+
+-- Para asegurarte de que TODOS los productos tengan stock de al menos 5
+UPDATE productos
+SET stock = 5
+WHERE stock IS NULL OR stock < 5;

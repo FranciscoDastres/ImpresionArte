@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, ShoppingCart, Heart, ChevronDown, User, Settings, LogOut } from "lucide-react";
+import { Menu, X, ShoppingCart, ChevronDown, User, Settings, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import ApiService from "../../services/api";
-import { useCart } from "../../contexts/CartContext";
+import useCart from "../../hooks/useCart";
 import { useAuth } from "../../contexts/AuthContext";
 
 function Header() {
@@ -13,12 +13,13 @@ function Header() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const { cart, cartCount, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart();
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { user, logout, isAdmin, isClient } = useAuth();
-  const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+  const CLP = new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -28,11 +29,11 @@ function Header() {
         const data = await ApiService.getCategorias();
         setCategories(data);
       } catch (err) {
-        setError('Error al cargar categorías');
+        setError("Error al cargar categorías");
         setCategories([
           { id: 1, nombre: "Vasos 3D", descripcion: "Vasos personalizados en 3D" },
           { id: 2, nombre: "Placas Navi", descripcion: "Placas decorativas Navi" },
-          { id: 3, nombre: "Figuras", descripcion: "Figuras coleccionables 3D" }
+          { id: 3, nombre: "Figuras", descripcion: "Figuras coleccionables 3D" },
         ]);
       } finally {
         setLoading(false);
@@ -43,12 +44,12 @@ function Header() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (userMenuOpen && !event.target.closest('.user-menu')) {
+      if (userMenuOpen && !event.target.closest(".user-menu")) {
         setUserMenuOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [userMenuOpen]);
 
   return (
@@ -56,7 +57,7 @@ function Header() {
       <header className="border-b border-gray-200 w-full">
         <div className="w-full max-w-none mx-auto px-4 lg:px-20 xl:px-32">
           <div className="flex items-center justify-between py-2 sm:py-5">
-            {/* Logo (izquierda) */}
+            {/* Logo */}
             <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
               <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -68,8 +69,7 @@ function Header() {
                 <div className="text-sm xl:text-base text-gray-600">Impresiones 3D Personalizadas</div>
               </div>
             </a>
-
-            {/* Search Bar (centro) */}
+            {/* Search Bar */}
             <div className="flex-1 flex justify-center px-4">
               <div className="w-full max-w-2xl">
                 <div className="relative">
@@ -88,8 +88,7 @@ function Header() {
                 </div>
               </div>
             </div>
-
-            {/* Enlaces/Espacio (derecha) */}
+            {/* Iconos */}
             <div className="hidden md:flex items-center space-x-4 xl:space-x-8">
               {user ? (
                 <>
@@ -146,6 +145,7 @@ function Header() {
                   <Link to="/register" className="text-gray-700 hover:text-blue-600 font-medium">Registro</Link>
                 </>
               )}
+
               <button className="p-2 hover:text-blue-600 transition-colors relative" onClick={() => setCartSidebarOpen(true)}>
                 <ShoppingCart className="w-6 h-6" />
                 {cartCount > 0 && (
@@ -155,8 +155,7 @@ function Header() {
                 )}
               </button>
             </div>
-
-            {/* Mobile Menu Button */}
+            {/* Botón menú mobile */}
             <div className="md:hidden ml-2">
               <button className="p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
@@ -165,8 +164,7 @@ function Header() {
           </div>
         </div>
       </header>
-
-      {/* Mobile Menu */}
+      {/* Menú móvil */}
       {mobileMenuOpen && (
         <div className="md:hidden px-4 pb-4 space-y-3 border-b border-gray-200 bg-white w-full max-w-[540px] mx-auto">
           <Link to="/login" className="block text-base text-gray-700 hover:text-blue-600 font-medium">Iniciar Sesión</Link>
@@ -194,8 +192,7 @@ function Header() {
           </div>
         </div>
       )}
-
-      {/* Navigation Desktop */}
+      {/* Barra navegación desktop */}
       <nav className="border-b border-gray-200 hidden md:block bg-white w-full overflow-x-auto scrollbar-hide">
         <div className="px-4 lg:px-20 xl:px-32 mx-auto w-full max-w-none">
           <div className="flex items-center justify-between py-4">
@@ -206,18 +203,18 @@ function Header() {
                   onClick={() => setSidebarOpen(true)}
                   className="flex items-center space-x-2 transition-colors duration-200 font-semibold"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
+                  <Menu className="w-5 h-5" />
                   <span>COMPRAR POR CATEGORÍA</span>
                   <ChevronDown className={`w-5 h-5 transition-transform duration-200 ${sidebarOpen ? "rotate-180" : ""}`} />
                 </button>
                 <>
                   {/* Overlay */}
-                  <div
-                    className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${sidebarOpen ? "block" : "hidden"}`}
-                    onClick={() => setSidebarOpen(false)}
-                  />
+                  {sidebarOpen && (
+                    <div
+                      className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+                      onClick={() => setSidebarOpen(false)}
+                    />
+                  )}
                   {/* Sidebar con transición */}
                   <div
                     className={`fixed top-0 left-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
@@ -283,9 +280,11 @@ function Header() {
         </div>
       </nav>
 
-      {/* Sidebar Carrito */}
+      {/* SIDEBAR CARRITO */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${cartSidebarOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-in-out ${
+          cartSidebarOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
@@ -304,11 +303,11 @@ function Header() {
               {cart.map((item) => (
                 <li key={item.id} className="flex items-center justify-between border-b pb-2">
                   <div className="flex items-center space-x-3">
-                    {item.imagen && (
-                      <img src={item.imagen} alt={item.nombre} className="w-12 h-12 object-cover rounded" />
+                    {item.imagen_principal && (
+                      <img src={item.imagen_principal} alt={item.titulo || item.nombre} className="w-12 h-12 object-cover rounded" />
                     )}
                     <div>
-                      <div className="font-medium text-gray-800">{item.nombre}</div>
+                      <div className="font-medium text-gray-800">{item.titulo || item.nombre}</div>
                       <div className="text-xs text-gray-500">{CLP.format(item.precio)} x {item.quantity}</div>
                     </div>
                   </div>
@@ -331,20 +330,21 @@ function Header() {
               <span>Total:</span>
               <span>{CLP.format(cartTotal)}</span>
             </div>
-            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition mb-2" onClick={() => { setCartSidebarOpen(false); navigate('/checkout'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+            <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition mb-2"
+              onClick={() => { setCartSidebarOpen(false); navigate('/checkout'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
               Ir a pagar
             </button>
             <button className="w-full text-xs text-gray-500 underline" onClick={clearCart}>Vaciar carrito</button>
           </div>
         )}
-        {/* Overlay para cerrar el slide */}
-        {cartSidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
-            onClick={() => setCartSidebarOpen(false)}
-          />
-        )}
       </div>
+      {/* OVERLAY para el sidebar (fuera del sidebar div!) */}
+      {cartSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+          onClick={() => setCartSidebarOpen(false)}
+        />
+      )}
     </div>
   );
 }

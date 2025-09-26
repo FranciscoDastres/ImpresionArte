@@ -7,7 +7,6 @@ import useCart from "../../hooks/useCart";
 function PopularProducts() {
   const carouselRef = useRef();
   const [activeCategory, setActiveCategory] = useState("vasos3d");
-  const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,9 +14,6 @@ function PopularProducts() {
   const { addToCart, isStockExceeded } = useCart();
   const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
 
-
-
-  // Cargar productos por categoría
   useEffect(() => {
     const fetchProducts = async () => {
       if (!activeCategory) return;
@@ -63,22 +59,15 @@ function PopularProducts() {
 
   return (
     <section className="relative px-2 sm:px-6 py-8">
-      <h2 className="text-2xl font-bold mb-1 text-black drop-shadow-lg">
-        Productos Populares
-      </h2>
-      <p className="text-sm text-gray-700 mb-4 drop-shadow-md">
-        No te pierdas las ofertas actuales hasta fin de mes.
-      </p>
+      <h2 className="text-2xl font-bold mb-1 text-black drop-shadow-lg">Productos Populares</h2>
+      <p className="text-sm text-gray-700 mb-4 drop-shadow-md">No te pierdas las ofertas actuales hasta fin de mes.</p>
 
-
-      {/* Loading */}
       {loading && (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
       )}
 
-      {/* Flecha Izquierda */}
       {!loading && products.length > 0 && (
         <button
           onClick={() => scroll("left")}
@@ -88,7 +77,6 @@ function PopularProducts() {
         </button>
       )}
 
-      {/* Carrusel de productos */}
       {!loading && (
         <div
           ref={carouselRef}
@@ -130,11 +118,20 @@ function PopularProducts() {
                     className={`flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2
                       ${isStockExceeded(product) ? "opacity-50 cursor-not-allowed" : ""}
                     `}
-                    onClick={() => addToCart(product)}
+                    onClick={() => {
+                      addToCart({
+                        ...product,
+                        precio: typeof product.precio === "number" ? product.precio : parseFloat(product.precio ?? product.precio_anterior ?? 0),
+                        id: product.id ?? product._id,
+                        quantity: 1,
+                        stock: product.stock ?? 99,
+                        nombre: product.titulo ?? product.nombre
+                      });
+                    }}
                     disabled={isStockExceeded(product)}
                     aria-label={`Agregar ${product.titulo} al carrito`}
                   >
-                    🛒 {isStockExceeded(product) ? "Sin stock" : "Add to cart"}
+                    🛒 {isStockExceeded(product) ? "Sin stock" : "Agregar a carrito"}
                   </button>
                   <button className="bg-gray-100 text-gray-500 p-2 rounded-xl hover:bg-gray-200 transition" title="Más detalles" onClick={() => navigate(`/producto/${product.id}`)}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -149,14 +146,12 @@ function PopularProducts() {
         </div>
       )}
 
-      {/* Sin productos */}
       {!loading && products.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <p>No hay productos disponibles en esta categoría.</p>
         </div>
       )}
 
-      {/* Flecha Derecha */}
       {!loading && products.length > 0 && (
         <button
           onClick={() => scroll("right")}
