@@ -284,10 +284,11 @@ function Header() {
             <span className="font-bold text-base text-gray-800 leading-none">ImpresionArte</span>
           </a>
           <div className="flex space-x-1">
-            <button className="p-2" onClick={() => setCartSidebarOpen(true)}>
+            {/* CARRITO MOBILE AJUSTADO */}
+            <button className="p-2 relative" onClick={() => setCartSidebarOpen(true)}>
               <ShoppingCart className="w-6 h-6" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                <span className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
                   {cartCount}
                 </span>
               )}

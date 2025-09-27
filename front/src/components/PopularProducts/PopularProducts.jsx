@@ -157,7 +157,7 @@ function PopularProducts() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h2l3.6 9.59a2 2 0 0 0 1.92 1.41h7.33a2 2 0 0 0 1.95-1.57l1.58-7.59H6" />
                     </svg>
                   </span>
-                  {isStockExceeded(product) ? "OUT OF STOCK" : "Agregar al Carrito"}
+                  {isStockExceeded(product) ? "Agotado" : "Agregar al Carrito"}
                 </button>
               </div>
             </div>
