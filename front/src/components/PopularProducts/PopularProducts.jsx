@@ -10,6 +10,7 @@ function PopularProducts() {
   const [loading, setLoading] = useState(true);
   const [catLoading, setCatLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const navigate = useNavigate();
   const { addToCart, isStockExceeded } = useCart();
   const CLP = new Intl.NumberFormat('es-CL', {
@@ -18,7 +19,6 @@ function PopularProducts() {
     maximumFractionDigits: 0
   });
 
-  // Fetch categorías
   useEffect(() => {
     ApiService.getCategorias()
       .then(res => {
@@ -29,7 +29,6 @@ function PopularProducts() {
       .finally(() => setCatLoading(false));
   }, []);
 
-  // Fetch productos según categoría seleccionada
   useEffect(() => {
     if (!activeCategory) return;
     setLoading(true);
@@ -60,29 +59,35 @@ function PopularProducts() {
     );
 
   return (
-    <section className="relative px-2 sm:px-12 py-8 font-sans">
-      <h2 className="text-2xl font-bold mb-1 text-gray-900">Popular Products</h2>
-      <p className="text-sm text-gray-600 mb-6">
-        No te pierdas las ofertas actuales hasta fin de mes.
-      </p>
-      {/* Categoría Tabs */}
-      <nav className="mb-8 flex gap-4 justify-center border-b border-gray-200">
-        {categories.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setActiveCategory(cat.nombre)}
-            className={`pb-2 px-3 text-base font-medium transition uppercase
-              ${activeCategory === cat.nombre
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-500 hover:text-blue-500"
-              }`}
-            style={{ outline: "none" }}
-            aria-current={activeCategory === cat.nombre ? "page" : undefined}
-          >
-            {cat.nombre}
-          </button>
-        ))}
-      </nav>
+    <section className="relative px-2 sm:px-6 md:px-10 lg:px-32 py-2 font-sans">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-2">
+        {/* Título y subtítulo a la izquierda */}
+        <div className="flex flex-col sm:items-start sm:justify-start mt-3 sm:mt-0 w-full sm:w-auto">
+          <h2 className="text-2xl font-bold text-gray-900 mb-1 sm:mb-0">Popular Products</h2>
+          <p className="text-sm text-gray-600">
+            No te pierdas las ofertas actuales hasta fin de mes.
+          </p>
+        </div>
+        {/* Categoría Tabs a la derecha */}
+        <nav className="flex items-center gap-4 w-full sm:w-auto overflow-x-auto py-2 sm:justify-end sm:ml-auto">
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.nombre)}
+              className={`pb-2 px-3 text-base font-medium transition uppercase
+                ${activeCategory === cat.nombre
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 hover:text-blue-500"
+                }`}
+              style={{ outline: "none" }}
+              aria-current={activeCategory === cat.nombre ? "page" : undefined}
+            >
+              {cat.nombre}
+            </button>
+          ))}
+        </nav>
+      </div>
+      {/* Productos */}
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
@@ -94,14 +99,11 @@ function PopularProducts() {
               key={product.id}
               className="relative flex flex-col bg-white rounded-md border border-gray-200 w-full max-w-[270px] min-h-[410px] mx-auto transition-all"
             >
-              {/* Badge descuento */}
               {product.descuento && (
                 <span className="absolute top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-2 py-0.5 rounded-md">
                   {product.descuento}%
                 </span>
               )}
-
-              {/* Imagen más grande y clickable */}
               <div
                 className="w-full h-48 bg-white flex items-center justify-center cursor-pointer"
                 onClick={() => navigate(`/producto/${product.id}`)}
@@ -115,8 +117,6 @@ function PopularProducts() {
                   loading="lazy"
                 />
               </div>
-
-              {/* Info */}
               <div className="flex flex-col gap-0.5 px-4 pt-3 pb-4 flex-1">
                 <div className="text-gray-500 text-xs mb-0.5 truncate">{product.marca || product.categoria || "Marca"}</div>
                 <h3 className="font-medium text-base text-gray-900 leading-tight truncate" title={product.titulo}>
