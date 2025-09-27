@@ -7,6 +7,11 @@ import ApiService from "../../services/api";
 import useCart from "../../hooks/useCart";
 import { useAuth } from "../../contexts/AuthContext";
 
+function capitalize(word) {
+  if (!word) return '';
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -57,8 +62,7 @@ function Header() {
       {/* HEADER DESKTOP */}
       <header className="border-b border-gray-200 w-full hidden md:block">
         <div className="w-full max-w-none mx-auto px-4 lg:px-20 xl:px-32">
-          <div className="flex items-center justify-between py-2 sm:py-5">
-            {/* Logo */}
+          <div className="flex items-center justify-between py-0 sm:py-5">
             <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
               <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -70,7 +74,6 @@ function Header() {
                 <div className="text-sm xl:text-base text-gray-600">Impresiones 3D Personalizadas</div>
               </div>
             </a>
-            {/* Search Bar */}
             <div className="flex-1 flex justify-center px-4">
               <div className="w-full max-w-2xl">
                 <div className="relative">
@@ -89,7 +92,6 @@ function Header() {
                 </div>
               </div>
             </div>
-            {/* Iconos Desktop */}
             <div className="flex items-center space-x-4 xl:space-x-8">
               {user ? (
                 <>
@@ -163,7 +165,6 @@ function Header() {
           <div className="px-4 lg:px-20 xl:px-32 mx-auto w-full max-w-none">
             <div className="flex items-center justify-between py-4">
               <div className="flex items-center space-x-6 xl:space-x-10">
-                {/* Sidebar Categorías Desktop */}
                 <div className="relative">
                   <button
                     onClick={() => setSidebarOpen(true)}
@@ -205,9 +206,9 @@ function Header() {
                             <li key={cat.id}>
                               <Link
                                 to={`/productos?categoria=${encodeURIComponent(cat.nombre)}`}
-                                className="text-gray-700 hover:text-blue-600 text-base font-medium py-2 px-2 rounded transition block"
+                                className="text-gray-700 hover:text-blue-600 text-base font-medium py-2 px-2 rounded transition block capitalize"
                               >
-                                {cat.nombre}
+                                {capitalize(cat.nombre)}
                               </Link>
                             </li>
                           ))}
@@ -216,15 +217,42 @@ function Header() {
                     </div>
                   </>
                 </div>
-                {/* Enlaces directos a categorías */}
+                {/* ENLACES DESKTOP CATEGORÍA CON RIPPLE */}
                 <div className="flex space-x-4 xl:space-x-6 overflow-x-auto scrollbar-hide">
                   {categories.map((category) => (
                     <Link
                       key={category.id}
                       to={`/productos?categoria=${encodeURIComponent(category.nombre)}`}
-                      className="text-gray-700 hover:text-blue-600 transition-colors duration-200 whitespace-nowrap font-semibold"
+                      className="
+                        text-gray-700 transition-colors duration-200 whitespace-nowrap font-semibold relative
+                        capitalize
+                        group
+                        px-3 py-1.5 rounded-lg
+                        hover:text-blue-600
+                        active:outline-none focus:outline-none
+                        overflow-hidden
+                      "
+                      style={{ position: 'relative', display: 'inline-block' }}
                     >
-                      {category.nombre}
+                      <span className="relative z-10">{capitalize(category.nombre)}</span>
+                      <span className="
+                        pointer-events-none
+                        absolute left-1/2 top-1/2 
+                        w-0 h-0
+                        rounded-full
+                        bg-blue-300/30
+                        opacity-0
+                        group-active:opacity-100
+                        group-active:w-[220%]
+                        group-active:h-[400%]
+                        group-active:transition-all 
+                        group-active:duration-400
+                        transform
+                        -translate-x-1/2
+                        -translate-y-1/2
+                        transition-all
+                        duration-300
+                      "></span>
                     </Link>
                   ))}
                 </div>
@@ -244,7 +272,7 @@ function Header() {
           </div>
         </nav>
       </header>
-      {/* HEADER Y BUSCADOR MOBILE */}
+      {/* HEADER MOBILE */}
       <header className="border-b border-gray-200 w-full md:hidden">
         <div className="w-full flex items-center px-3 py-2 justify-between">
           <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200">
@@ -305,10 +333,10 @@ function Header() {
                 <Link
                   key={category.id}
                   to={`/productos?categoria=${encodeURIComponent(category.nombre)}`}
-                  className="block text-base text-gray-700 hover:text-blue-600 transition-colors py-1 font-medium"
+                  className="block text-base text-gray-700 hover:text-blue-600 transition-colors py-1 font-medium capitalize"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {category.nombre}
+                  {capitalize(category.nombre)}
                 </Link>
               ))
             )}
@@ -378,7 +406,6 @@ function Header() {
           onClick={() => setCartSidebarOpen(false)}
         />
       )}
-
     </div>
   );
 }
