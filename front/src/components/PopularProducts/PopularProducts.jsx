@@ -1,164 +1,169 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../services/api";
 import useCart from "../../hooks/useCart";
 
 function PopularProducts() {
-  const carouselRef = useRef();
-  const [activeCategory, setActiveCategory] = useState("vasos3d");
+  const [categories, setCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [catLoading, setCatLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { addToCart, isStockExceeded } = useCart();
-  const CLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+  const CLP = new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+    maximumFractionDigits: 0
+  });
 
+  // Fetch categorías
   useEffect(() => {
-    const fetchProducts = async () => {
-      if (!activeCategory) return;
-      try {
-        setLoading(true);
-        const data = await ApiService.getProductosPorCategoria(activeCategory);
-        setProducts(data);
-      } catch (err) {
-        setError('Error al cargar productos');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
+    ApiService.getCategorias()
+      .then(res => {
+        setCategories(res);
+        if (res.length > 0) setActiveCategory(res[0].nombre);
+      })
+      .catch(err => setError("Error al cargar categorías"))
+      .finally(() => setCatLoading(false));
+  }, []);
+
+  // Fetch productos según categoría seleccionada
+  useEffect(() => {
+    if (!activeCategory) return;
+    setLoading(true);
+    ApiService.getProductosPorCategoria(activeCategory)
+      .then(setProducts)
+      .catch(() => setError('Error al cargar productos'))
+      .finally(() => setLoading(false));
   }, [activeCategory]);
 
-  const scroll = (direction) => {
-    const container = carouselRef.current;
-    const scrollAmount = 300;
-    if (!container) return;
-    container.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth"
-    });
-  };
-
-  if (error) {
+  if (catLoading)
     return (
-      <section className="relative px-2 sm:px-6 py-8">
-        <div className="text-center text-red-600">
-          <p>Error: {error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-          >
-            Reintentar
-          </button>
-        </div>
+      <section className="w-full py-8 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
       </section>
     );
-  }
+
+  if (error)
+    return (
+      <section className="w-full py-8 text-center text-blue-600">
+        <p>Error: {error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+        >
+          Reintentar
+        </button>
+      </section>
+    );
 
   return (
-    <section className="relative px-2 sm:px-6 py-8">
-      <h2 className="text-2xl font-bold mb-1 text-black drop-shadow-lg">Productos Populares</h2>
-      <p className="text-sm text-gray-700 mb-4 drop-shadow-md">No te pierdas las ofertas actuales hasta fin de mes.</p>
-
-      {loading && (
+    <section className="relative px-2 sm:px-12 py-8 font-sans">
+      <h2 className="text-2xl font-bold mb-1 text-gray-900">Popular Products</h2>
+      <p className="text-sm text-gray-600 mb-6">
+        No te pierdas las ofertas actuales hasta fin de mes.
+      </p>
+      {/* Categoría Tabs */}
+      <nav className="mb-8 flex gap-4 justify-center border-b border-gray-200">
+        {categories.map(cat => (
+          <button
+            key={cat.id}
+            onClick={() => setActiveCategory(cat.nombre)}
+            className={`pb-2 px-3 text-base font-medium transition uppercase
+              ${activeCategory === cat.nombre
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-500 hover:text-blue-500"
+              }`}
+            style={{ outline: "none" }}
+            aria-current={activeCategory === cat.nombre ? "page" : undefined}
+          >
+            {cat.nombre}
+          </button>
+        ))}
+      </nav>
+      {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
         </div>
-      )}
-
-      {!loading && products.length > 0 && (
-        <button
-          onClick={() => scroll("left")}
-          className="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
-        >
-          <ChevronLeft />
-        </button>
-      )}
-
-      {!loading && (
-        <div
-          ref={carouselRef}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 xl:gap-4 pb-2 pl-2 pr-10 xl:pr-20"
-        >
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 mx-auto max-w-7xl w-full justify-items-center">
           {products.map((product) => (
             <div
               key={product.id}
-              className="flex flex-col bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden w-full max-w-xs mx-auto"
+              className="relative flex flex-col bg-white rounded-md border border-gray-200 w-full max-w-[220px] min-h-[340px] mx-auto transition-all"
             >
-              <div className="relative w-full h-60 bg-gray-100 flex items-center justify-center">
+              {/* Badge descuento */}
+              {product.descuento && (
+                <span className="absolute top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-2 py-0.5 rounded-md">
+                  {product.descuento}%
+                </span>
+              )}
+
+              {/* Imagen */}
+              <div className="w-full h-36 bg-white flex items-center justify-center">
                 <img
                   src={product.imagen_principal}
                   alt={product.titulo}
-                  className="object-contain w-full h-full"
+                  className="object-contain w-full h-full p-2"
                   onError={e => { e.target.src = '/images/placeholder.png'; }}
                   loading="lazy"
                 />
-                {product.descuento && (
-                  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg shadow">
-                    -{product.descuento}
-                  </span>
-                )}
               </div>
-              <div className="flex flex-col gap-2 p-4 flex-1">
-                <div className="flex gap-2 mb-1">
-                  <span className="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded">stock ready</span>
-                  <span className="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-0.5 rounded">official store</span>
-                </div>
-                <h3 className="font-bold text-lg text-black mb-1 truncate">{product.titulo}</h3>
-                <div className="flex items-end gap-2 mb-2">
-                  <span className="text-black text-xl font-bold">{CLP.format(product.precio)}</span>
-                  {product.precio_anterior && (
-                    <span className="line-through text-gray-400 text-base">{CLP.format(product.precio_anterior)}</span>
-                  )}
-                </div>
-                <div className="flex gap-2 mt-auto">
-                  <button
-                    className={`flex-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-red-600 transition flex items-center justify-center gap-2
-                      ${isStockExceeded(product) ? "opacity-50 cursor-not-allowed" : ""}
-                    `}
-                    onClick={() => {
-                      addToCart({
-                        ...product,
-                        precio: typeof product.precio === "number" ? product.precio : parseFloat(product.precio ?? product.precio_anterior ?? 0),
-                        id: product.id ?? product._id,
-                        quantity: 1,
-                        stock: product.stock ?? 99,
-                        nombre: product.titulo ?? product.nombre
-                      });
-                    }}
-                    disabled={isStockExceeded(product)}
-                    aria-label={`Agregar ${product.titulo} al carrito`}
-                  >
-                    🛒 {isStockExceeded(product) ? "Sin stock" : "Agregar a carrito"}
-                  </button>
-                  <button className="bg-gray-100 text-gray-500 p-2 rounded-xl hover:bg-gray-200 transition" title="Más detalles" onClick={() => navigate(`/producto/${product.id}`)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.522 4.5 12 4.5c4.478 0 8.577 3.01 9.964 7.183.07.207.07.431 0 .639C20.577 16.49 16.478 19.5 12 19.5c-4.478 0-8.577-3.01-9.964-7.183z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+
+              {/* Info */}
+              <div className="flex flex-col gap-0.5 px-4 pt-3 pb-4 flex-1">
+                <div className="text-gray-500 text-xs mb-0.5 truncate">{product.marca || product.categoria || "Marca"}</div>
+                <h3 className="font-medium text-base text-gray-900 leading-tight truncate" title={product.titulo}>
+                  {product.titulo}
+                </h3>
+                <div className="flex items-center gap-0.5 my-1">
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <svg key={i} className="w-4 h-4 fill-yellow-400" viewBox="0 0 20 20">
+                      <polygon points="10,1.6 12.3,7.6 18.7,7.8 13.6,11.7 15.4,17.8 10,14.2 4.6,17.8 6.4,11.7 1.3,7.8 7.7,7.6" />
                     </svg>
-                  </button>
+                  ))}
                 </div>
+                <div className="flex items-end gap-2 mb-3">
+                  {product.precio_anterior && (
+                    <span className="line-through text-gray-400 text-sm">{CLP.format(product.precio_anterior)}</span>
+                  )}
+                  <span className="text-blue-500 font-semibold text-lg">{CLP.format(product.precio)}</span>
+                </div>
+                <button
+                  className="flex items-center justify-center gap-2 w-full border border-blue-400 text-blue-500 py-2 rounded-md font-medium mt-2 hover:bg-blue-50 transition"
+                  onClick={() => {
+                    addToCart({
+                      ...product,
+                      precio: typeof product.precio === "number" ? product.precio : parseFloat(product.precio ?? product.precio_anterior ?? 0),
+                      id: product.id ?? product._id,
+                      quantity: 1,
+                      stock: product.stock ?? 99,
+                      nombre: product.titulo ?? product.nombre
+                    });
+                  }}
+                  disabled={isStockExceeded(product)}
+                  aria-label={`Agregar ${product.titulo} al carrito`}
+                >
+                  <span>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+                      <circle cx="9" cy="20" r="1.5" />
+                      <circle cx="18" cy="20" r="1.5" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h2l3.6 9.59a2 2 0 0 0 1.92 1.41h7.33a2 2 0 0 0 1.95-1.57l1.58-7.59H6" />
+                    </svg>
+                  </span>
+                  {isStockExceeded(product) ? "OUT OF STOCK" : "Agregar al Carrito"}
+                </button>
               </div>
             </div>
           ))}
         </div>
       )}
-
       {!loading && products.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <p>No hay productos disponibles en esta categoría.</p>
         </div>
-      )}
-
-      {!loading && products.length > 0 && (
-        <button
-          onClick={() => scroll("right")}
-          className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm shadow-lg p-1 sm:p-2 rounded-full hover:scale-105 border border-white/30"
-        >
-          <ChevronRight />
-        </button>
       )}
     </section>
   );
