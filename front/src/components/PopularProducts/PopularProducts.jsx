@@ -92,7 +92,7 @@ function PopularProducts() {
           {products.map((product) => (
             <div
               key={product.id}
-              className="relative flex flex-col bg-white rounded-md border border-gray-200 w-full max-w-[220px] min-h-[340px] mx-auto transition-all"
+              className="relative flex flex-col bg-white rounded-md border border-gray-200 w-full max-w-[270px] min-h-[410px] mx-auto transition-all"
             >
               {/* Badge descuento */}
               {product.descuento && (
@@ -101,12 +101,16 @@ function PopularProducts() {
                 </span>
               )}
 
-              {/* Imagen */}
-              <div className="w-full h-36 bg-white flex items-center justify-center">
+              {/* Imagen más grande y clickable */}
+              <div
+                className="w-full h-48 bg-white flex items-center justify-center cursor-pointer"
+                onClick={() => navigate(`/producto/${product.id}`)}
+                title="Ver detalles del producto"
+              >
                 <img
                   src={product.imagen_principal}
                   alt={product.titulo}
-                  className="object-contain w-full h-full p-2"
+                  className="object-contain w-full h-full p-2 transition hover:opacity-80"
                   onError={e => { e.target.src = '/images/placeholder.png'; }}
                   loading="lazy"
                 />
