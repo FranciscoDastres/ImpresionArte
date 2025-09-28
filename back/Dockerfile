@@ -9,10 +9,8 @@ COPY back/package*.json ./
 RUN npm install --production
 
 # Copia el resto del código fuente backend
-COPY back/. ./
-
-# Expone el puerto estándar para Express
+COPY package*.json ./
+RUN npm install --production
+COPY . .
 EXPOSE 3000
-
-# Comando principal
 CMD ["npm", "start"]
