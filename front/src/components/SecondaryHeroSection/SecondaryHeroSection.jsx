@@ -1,6 +1,6 @@
 export default function SecondaryHeroSection() {
   return (
-    <section className="w-full py-20 px-4 flex justify-center items-center rounded-xl">
+    <section className="w-full py-5 px-4 flex justify-center items-center rounded-xl">
       <div className="max-w-5xl w-full flex flex-col md:flex-row items-center gap-12 rounded-3xl shadow-2xl p-10 border border-gray-100">
         {/* Imagen moderna o ilustración */}
         <div className="flex-1 flex justify-center items-center">
@@ -14,7 +14,7 @@ export default function SecondaryHeroSection() {
           />
         </div>
         {/* Texto y botón */}
-        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left bg-white/90 backdrop-blur-sm p-8">
+        <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left  backdrop-blur-sm p-8">
           <h2 className="text-4xl md:text-5xl font-extrabold text-black mb-4 drop-shadow-lg leading-tight">
             ¡Personaliza tu producto 3D!
           </h2>
