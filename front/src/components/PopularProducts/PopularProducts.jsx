@@ -99,8 +99,9 @@ function PopularProducts() {
               key={product.id}
               className="relative flex flex-col bg-white rounded-md border border-gray-200 w-full max-w-[270px] min-h-[410px] mx-auto transition-all"
             >
+              {/* El badge SIEMPRE arriba de la imagen y con z-10 */}
               {product.descuento && (
-                <span className="absolute top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-2 py-0.5 rounded-md">
+                <span className="absolute z-10 top-3 left-3 bg-blue-500 text-white text-xs font-semibold px-2 py-0.5 rounded-md">
                   {product.descuento}%
                 </span>
               )}
@@ -157,7 +158,7 @@ function PopularProducts() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h2l3.6 9.59a2 2 0 0 0 1.92 1.41h7.33a2 2 0 0 0 1.95-1.57l1.58-7.59H6" />
                     </svg>
                   </span>
-                  {isStockExceeded(product) ? "Agotado" : "Agregar al Carrito"}
+                  {isStockExceeded(product) ? "Agotado" : "Agregar"}
                 </button>
               </div>
             </div>
