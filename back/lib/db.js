@@ -1,10 +1,12 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
-// Forzar el uso de DATABASE_URL en producción
-const config = process.env.DATABASE_URL 
+// Prioriza DATABASE_URL, luego PG_URI
+const connectionString = process.env.DATABASE_URL || process.env.PG_URI;
+
+const config = connectionString
   ? {
-      connectionString: process.env.DATABASE_URL,
+      connectionString,
       ssl: {
         rejectUnauthorized: false
       }
@@ -21,8 +23,8 @@ const config = process.env.DATABASE_URL
     };
 
 console.log('Database config:', {
-  hasDatabaseUrl: !!process.env.DATABASE_URL,
-  nodeEnv: process.env.NODE_ENV,
+  mode: connectionString ? 'URL' : 'local/manual',
+  connectionString: connectionString ? 'used' : 'not used',
   host: config.host || 'connectionString'
 });
 
